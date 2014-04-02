@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Starter Kit: Remote Control</title>
+
+    <link href="css/bs/bootstrap.min.css" rel="stylesheet">
+    <link href="css/remote/dashboard.css" rel="stylesheet">
+    <script type="text/javascript">window.onload = function(){ document.getElementById("loading").style.display = "none" }</script>
+  </head>
+
+  <body>
+  	<div id="loading">
+  	  <div id="loading-text"><div class="alert alert-warning"><h1>Loading stuff...</h1></div></div>
+	</div>
+    <div class="navbar navbar-inverse navbar-static-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <span class="navbar-brand">Remote Control</span>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-left">
+            <li><a href="#dashboard-header" id="remote-page-new-remote">New Remote...</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#dashboard-header" id="remote-page-settings">Settings</a></li>
+            <li><a href="#dashboard-header" id="remote-page-about">About</a></li>
+            <li><a href="#dashboard-header" id="remote-page-legal-info">Legal Info</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-2 col-md-2 navbar">
+          <ul id="sidebar-overview" class="nav nav-sidebar">
+            <li id="li-overview" class="active"><a id="remote-page-overview" href="#dashboard-header">Overview</a></li>
+<!--             <li id="li-new-remote" class="active"><a id="remote-page-new-remote" href="#dashboard-header">New Remote...</a></li> -->
+          </ul>
+          <ul id="sidebar-remotes" class="nav nav-sidebar">
+          </ul>
+        </div>
+        <div class="col-sm-10 col-md-10 main">
+          <h1 id="dashboard-header" class="page-header"></h1>
+          <div id="dashboard" class="row">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Misc libs -->
+    <script src="js/jquery/jquery.min.js"></script>
+    <script src="js/bs/bootstrap.min.js"></script>
+    <script src="js/bs/bootstrap.touchspin.js"></script>
+
+    <!-- Bindings -->
+    <script src="js/tf/Tinkerforge.js"></script>
+    
+    <!-- Pages -->
+    <script src="js/remote/pages/PageEssentials.js"></script>
+    <script src="js/remote/pages/PageAbout.js"></script>
+    <script src="js/remote/pages/PageLegalInfo.js"></script>
+    <script src="js/remote/pages/PageOverview.js"></script>
+    <script src="js/remote/pages/PageNewRemote.js"></script>
+    <script src="js/remote/pages/PageRemoteSwitch.js"></script>
+
+    <!-- Remote Control -->
+    <script src="js/remote/RemoteControl.js"></script>
+  </body>
+</html>
