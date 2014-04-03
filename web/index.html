@@ -12,6 +12,7 @@
   </head>
 
   <body id="remote-body">
+    <div id="tf-image-container">
   	<div id="center-container">
       <div id="loading">
         <div id="loading-text"><div class="alert alert-warning"><h1>Loading stuff...</h1></div></div>
@@ -52,10 +53,12 @@
           </div>
         </div>
       </div>
+      </div>
     </div>
 
     <!-- Misc libs -->
     <script src="js/jquery/jquery.min.js"></script>
+    <script src="js/jquery/jquery.cookie.js"></script>
     <script src="js/bs/bootstrap.min.js"></script>
     <script src="js/bs/bootstrap.touchspin.js"></script>
 
@@ -63,8 +66,6 @@
     <script src="js/tf/Tinkerforge.js"></script>
     
     <!-- Pages -->
-    <script src="js/remote/pages/PageEssentials.js"></script>
-    <script src="js/remote/pages/PageAbout.js"></script>
     <script src="js/remote/pages/PageLegalInfo.js"></script>
     <script src="js/remote/pages/PageOverview.js"></script>
     <script src="js/remote/pages/PageNewRemote.js"></script>

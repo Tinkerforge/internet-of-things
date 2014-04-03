@@ -17,7 +17,6 @@ function RemoteDefinition() {
 function RemoteControl() {
   this.pages = {};
   this.pages['overview'] = new PageOverview();
-  this.pages['about'] = new PageAbout();
   this.pages['legal-info'] = new PageLegalInfo();
   this.pages['new-remote'] = new PageNewRemote();
   
@@ -25,6 +24,15 @@ function RemoteControl() {
 
   this.currentPage = this.pages['overview'];
   this.currentPage.start();
+  
+  this.init = function() {
+    $.cookie.json = true;
+    var remotes = $.cookie("remotes");
+    if(remotes !== undefined) {
+      remoteControl.remotes = remotes;
+      remoteControl.updateMenu(remoteControl.remotes);
+    }
+  };
   
   this.brickMenuClick = function(name, ev) {
     $('.remote-can-be-active').each(function() {
@@ -92,3 +100,4 @@ function RemoteControl() {
 }
 
 var remoteControl =  new RemoteControl();
+remoteControl.init();

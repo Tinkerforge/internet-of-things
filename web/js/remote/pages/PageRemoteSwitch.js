@@ -5,14 +5,16 @@ function PageRemoteSwitchA() {
   this.ipcon = null;
   this.remoteBricklet = null;
 
-  this.init = function() {
-  };
-  
   this.setRemoteDefinition = function(remoteDefinition) {
     this.remoteDefinition = remoteDefinition;
-    this.name = remoteDefinition.name + ' <button type="button" class="btn btn-default btn-lg">' +
-                                          '<span class="glyphicon glyphicon-wrench"></span> Edit' +
-                                        '</button>';
+    var edit = '<span id="remote-switch-a-buttons"><button id="remote-switch-edit" type="button" class="btn btn-default btn-sm">' +
+                 '<span class="glyphicon glyphicon-wrench"></span> Edit' +
+               '</button>';
+    
+    var remove = '<button id="remote-switch-remove" type="button" class="btn btn-default btn-sm">' +
+                   '<span class="glyphicon glyphicon-remove"></span> Remove' +
+                 '</button></span><span class="clearfix"></span>';
+    this.name = remoteDefinition.name + ' ' + edit + ' ' + remove;
   };
 
   this.addDOMElements = function() {
@@ -32,8 +34,6 @@ function PageRemoteSwitchA() {
   
   this.start = function() {
     if(!this.running) {
-      this.init();
-      
       this.addDOMElements();
       this.running = true;
       
@@ -77,6 +77,16 @@ function PageRemoteSwitchA() {
           
         }.bind(this)
       );
+      
+      $('#remote-switch-remove').click(function(e) {
+        e.preventDefault();
+        console.log(this.remoteDefinition.num);
+        console.log("click");
+        remoteControl.remotes.splice(this.remoteDefinition.num, 1);
+        remoteControl.updateMenu(remoteControl.remotes);
+        $.cookie("remotes", remoteControl.remotes);
+        $('#remote-page-overview').trigger('click');
+      }.bind(this));
     }
   };
 

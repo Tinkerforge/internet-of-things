@@ -46,7 +46,7 @@
   padding-right: 20px;
   padding-left: 20px;
 }
-.nav-sidebar > .active > a {
+/*.nav-sidebar > .active > a {
   color: #fff;
   background-color: #00AAEA;
 }
@@ -58,43 +58,21 @@
 .nav>li>a:focus {
   background-color: #00AAEA;
   text-decoration: none;
-}
-
-/*
- * Main content
- */
+}*/
 
 .main {
   padding: 20px;
 }
+
 @media (min-width: 768px) {
   .main {
     padding-right: 40px;
     padding-left: 40px;
   }
 }
+
 .main .page-header {
   margin-top: 0;
-}
-
-
-/*
- * Placeholder dashboard ideas
- */
-
-.placeholders {
-  margin-bottom: 30px;
-  text-align: center;
-}
-.placeholders h4 {
-  margin-bottom: 0;
-}
-.placeholder {
-  margin-bottom: 20px;
-}
-.placeholder img {
-  display: inline-block;
-  border-radius: 50%;
 }
 
 .alert-error {
@@ -124,37 +102,55 @@
 }
 
 body {
-  width: 100%; 
   height: 100%;
-  text-align: center; 
- /* background-color: #98AFC7; */
+  text-align: center;
   
-background:
-radial-gradient(black 15%, transparent 16%) 0 0,
-radial-gradient(black 15%, transparent 16%) 8px 8px,
-radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
-radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
-background-color:#282828;
-background-size:16px 16px;
+  background: radial-gradient(black 15%, transparent 16%) 0 0,
+    radial-gradient(black 15%, transparent 16%) 8px 8px,
+    radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+    radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+  background-color:#282828;
+  background-size:16px 16px;
+  z-index: -1;
 }
 
 html {
-  min-height: 100%;
   position: relative;
+  height: 100%;
+  z-index: -1;
+}
+
+#tf-image-container  {
+  z-index: -1;
+  height: 100%;
+}
+
+@media(min-width: 1300px) {
+  #tf-image-container  {
+    background: url(/img/background_tf.png) no-repeat;
+  }
 }
 
 #center-container {
   max-width: 900px; 
   text-align: left; 
   margin: 0px auto; 
+  margin-left: 150px;
   background-color: #FFFFFF;
   z-index: -1;
-  position: absolute;
+  position: static;
   top:0;
   bottom:0;
   left:0;
   right:0;
-  overflow:hidden;
+  overflow: hidden;
+  min-height: 100%; 
+}
+
+@media(max-width: 1210px) {
+  #center-container {
+    margin: 0px auto; 
+  }
 }
 
 #sidebar-remotes {
@@ -167,4 +163,8 @@ html {
 
 #div-img-overview-right {
   text-align: right; 
+}
+
+#remote-switch-a-buttons {
+  float: right;
 }

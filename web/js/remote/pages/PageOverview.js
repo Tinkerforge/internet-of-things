@@ -2,10 +2,6 @@ function PageOverview() {
   this.name = "Overview";
   this.running = false;
 
-  this.init = function() {
-
-  };
-
   this.addDOMElements = function() {
     $('#dashboard-header').hide();
     html = '<div class="col-sm-8 hidden-xs" id="div-img-overview-left"><img id="img-overview-left" src="img/overview_left.png"></div>' +
@@ -15,7 +11,6 @@ function PageOverview() {
 
   this.start = function() {
     if(!this.running) {
-      this.init();
       this.running = true;
       this.addDOMElements();
     }

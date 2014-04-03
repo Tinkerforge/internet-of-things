@@ -46,7 +46,7 @@ function PageNewRemote() {
              '<div id="div-new-remote-name" class="form-group">' +
                '<label for="new-remote-name" class="col-sm-2 control-label">Name</label>' +
                '<div class="col-sm-10">' +
-                 '<input type="text" class="form-control" id="new-remote-name" placeholder="Name of Socket (e.g. bedside lamp)">' +
+                 '<input maxlength="13" type="text" class="form-control" id="new-remote-name" placeholder="Name of Socket (e.g. bedside lamp)">' +
                '</div>' +
              '</div>' +
              '<div id="div-new-remote-type" class="form-group">' +
@@ -131,6 +131,8 @@ function PageNewRemote() {
         remoteControl.updateMenu(remoteControl.remotes);
         var id = '#remote-page-remote-' + remoteControl.remotes[remoteControl.remotes.length-1].num;
         $(id).trigger('click');
+        
+        $.cookie("remotes", remoteControl.remotes);
       });
       
       $('#new-remote-find').click(function(e) {
@@ -145,7 +147,7 @@ function PageNewRemote() {
             newWidth = 100; 
           }
           bar.width(newWidth.toString() +'%');
-          bar.text(newWidth.toString() + "%");
+          bar.text(Math.round(newWidth).toString() + "%");
           
           if(newWidth >= 100) {
             $('#new-remote-progress').removeClass('active');
