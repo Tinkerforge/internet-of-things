@@ -1,6 +1,7 @@
 function PageNewRemote() {
   this.name = "New Remote...";
   this.running = false;
+  this.connectTimeout = null;
 
   this.addDOMElements = function() {
     html = '<form class="form-horizontal" role="form">' +
@@ -20,6 +21,12 @@ function PageNewRemote() {
                '<div class="col-sm-offset-2 col-sm-10">' +
                  '<div id="new-remote-progress" class="progress progress-striped active">' +
                    '<div id="new-remote-progress-bar" class="progress-bar" style="width: 0%;"></div>' +
+                 '</div>' +
+               '</div>' +
+             '</div>' +
+             '<div class="form-group">' +
+               '<div class="col-sm-offset-2 col-sm-10">' +
+                 '<div id="new-remote-error">' +
                  '</div>' +
                '</div>' +
              '</div>' +
@@ -68,6 +75,27 @@ function PageNewRemote() {
     $('#div-new-remote-type').hide();
     $('#div-new-remote-save').hide();
   };
+  
+  this.removeElements = function(stage) {
+    switch(stage) {
+      case 0:
+        $('#div-new-remote-uid option[value="choose"]').prop('selected', true);
+        $('#div-new-remote-uid').hide();
+        $('#new-remote-name').val('');
+        $('#div-new-remote-name').hide();
+        clearTimeout(this.connectTimeout);
+        var bar = $('#new-remote-progress-bar');
+        bar.width('0%');
+        bar.text('');
+        
+      case 1:
+        $('#new-remote-type option[value="choose"]').prop('selected', true);
+        $('#div-new-remote-type').hide();
+        $('#div-new-remote-save').hide();
+        $('#new-remote-error').empty();
+        $('#div-new-remote-type-options').empty();
+    }
+  };
 
   this.start = function() {
     if(!this.running) {
@@ -83,7 +111,6 @@ function PageNewRemote() {
         rd.uid = $('#new-remote-uid').find(':selected').text();
         rd.name = $('#new-remote-name').val();
         rd.type = $('#new-remote-type').find(':selected').text();
-        console.log(rd);
         switch(rd.type) {
           case 'Type A':
             var a = new RemoteTypeA();
@@ -102,16 +129,17 @@ function PageNewRemote() {
         
         remoteControl.remotes.push(rd);
         remoteControl.updateMenu(remoteControl.remotes);
+        var id = '#remote-page-remote-' + remoteControl.remotes[remoteControl.remotes.length-1].num;
+        $(id).trigger('click');
       });
       
       $('#new-remote-find').click(function(e) {
         e.preventDefault();
+        this.removeElements(0);
         
         var progress = function(width) {
           var bar = $('#new-remote-progress-bar');
           
-          console.log(width);
-
           var newWidth = width + 2.5;
           if(newWidth > 100) {
             newWidth = 100; 
@@ -130,26 +158,39 @@ function PageNewRemote() {
               }
               $('#div-new-remote-uid').show();
             } else {
-              // TODO: Message to user
+              var alert_msg = 'Could not find any Remote Switch Bricklets at ' + $('#new-remote-host').val() + ':' + $('#new-remote-port').val();
+              var alert = '<div class="col-sm-12 alert alert-error"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Error:</strong> ' + alert_msg + '</div>';
+              $('#new-remote-error').prepend(alert);
+              var bar = $('#new-remote-progress-bar');
+              bar.width('0%');
+              bar.text('');
             }
           } else {
-            setTimeout(progress.bind(this, newWidth), 100);
+            this.connectTimeout = setTimeout(progress.bind(this, newWidth), 100);
           }
         };
         
-        setTimeout(progress.bind(this, 0), 25);
+        var bar = $('#new-remote-progress-bar');
+        bar.width('0%');
+        bar.text('');
+        
+        this.connectTimeout = setTimeout(progress.bind(this, 0), 25);
         
         var HOST = $('#new-remote-host').val();
         var PORT = parseInt($('#new-remote-port').val());
         var ipcon = new Tinkerforge.IPConnection();
         var uids = [];
         ipcon.connect(HOST, PORT,
-          function(ipcon, error) {
+          function(ipcon, host, port, error) {
             ipcon.disconnect();
-            var alert_msg = 'Connection Error ' + error + '.';
-            var alert = '<div class="row col-xs-18 col-sm-12"><div class="col-sm-6 alert alert-error"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Error:</strong> ' + alert_msg + '</div></div></div>';
-            $('div.main').prepend(alert);
-          }.bind(this, ipcon)
+            clearTimeout(this.connectTimeout);
+            var bar = $('#new-remote-progress-bar');
+            bar.width('0%');
+            bar.text('');
+            var alert_msg = 'Could not connect to ' + host + ':' + port.toString() + ' (Error: ' + error.toString() + ')';
+            var alert = '<div class="col-sm-12 alert alert-error"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Error:</strong> ' + alert_msg + '</div>';
+            $('#new-remote-error').prepend(alert);
+          }.bind(this, ipcon, HOST, PORT)
         );
 
         ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
@@ -167,15 +208,19 @@ function PageNewRemote() {
             }
           }.bind(this, uids)
         );
-      });
+      }.bind(this));
       
       $('#new-remote-host').keyup(function() {
-        // TODO: Hide everything again, delete UIDs
-      });
+        this.removeElements(0);
+      }.bind(this));
       
       $('#new-remote-port').keyup(function() {
-        // TODO: Hide everything again, delete UIDs
-      });
+        this.removeElements(0);
+      }.bind(this));
+      
+      $('#new-remote-port').change(function() {
+        this.removeElements(0);
+      }.bind(this));
       
       $('#new-remote-port').TouchSpin({
         min: 1,
@@ -194,10 +239,7 @@ function PageNewRemote() {
         if(value.length > 0) {
           $('#div-new-remote-type').show();
         } else {
-          $('#div-new-remote-type-options').empty();
-          $('#new-remote-type option[value="choose"]').prop('selected', true);
-          $('#div-new-remote-type').hide();
-          $('#div-new-remote-save').hide();
+          this.removeElements(1);
         }
       });
       

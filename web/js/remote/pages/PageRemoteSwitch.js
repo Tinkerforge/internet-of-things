@@ -10,17 +10,24 @@ function PageRemoteSwitchA() {
   
   this.setRemoteDefinition = function(remoteDefinition) {
     this.remoteDefinition = remoteDefinition;
-    this.name = "Remote Switch: " + remoteDefinition.name;
+    this.name = remoteDefinition.name + ' <button type="button" class="btn btn-default btn-lg">' +
+                                          '<span class="glyphicon glyphicon-wrench"></span> Edit' +
+                                        '</button>';
   };
 
   this.addDOMElements = function() {
-    html = '<div class="col-sm-6">' +
+    html = '<div class="col-sm-12">' +
+             '<p>' +
+               '<span id="remote-a-connection" class="label label-warning">Connecting...</span>' +
+             '</p>' +
              '<p>' +
                '<button id="remote-a-on" type="button" class="btn btn-primary btn-block btn-lg">On</button>' +
                '<button id="remote-a-off" type="button" class="btn btn-primary btn-block btn-lg">Off</button>' +
              '</p>' +
            '</div>';
     $('#dashboard').append(html);
+    $('#remote-a-on').attr('disabled', true);
+    $('#remote-a-off').attr('disabled', true);
   };
   
   this.start = function() {
@@ -33,17 +40,24 @@ function PageRemoteSwitchA() {
       // TODO: call getter in regular intervals after connection
       // TODO: Write "Connection lost..." if no answer
 
-      // TODO: Show "Connecting..." or something
       this.ipcon = new Tinkerforge.IPConnection();
       this.ipcon.connect(this.remoteDefinition.host, this.remoteDefinition.port,
         function(error) {
-          // TODO: Write "Could not connect...
+          $('#remote-a-connection').text('Could not connect to ' + this.remoteDefinition.host + ':' + this.remoteDefinition.port.toString() + ' (Error: ' + error.toString() + ')');
+          $('#remote-a-connection').addClass('label-danger');
+          $('#remote-a-connection').removeClass('label-warning');
           this.ipcon.disconnect();
         }.bind(this)
       );
 
       this.ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
         function(connectReason) {
+          $('#remote-a-connection').text('Connection to ' + this.remoteDefinition.host + ':' + this.remoteDefinition.port.toString() + ' established');
+          $('#remote-a-connection').addClass('label-success');
+          $('#remote-a-connection').removeClass('label-warning');
+          $('#remote-a-on').attr('disabled', false);
+          $('#remote-a-off').attr('disabled', false);
+          
           this.remoteBricklet = new Tinkerforge.BrickletRemoteSwitch(this.remoteDefinition.uid, this.ipcon);
           // TODO: call getter and remove "Connecting...", otherwise write "Could not find Remote Switch with UID XXX"
           
@@ -52,7 +66,6 @@ function PageRemoteSwitchA() {
             this.remoteBricklet.switchSocket(this.remoteDefinition.typeDefinition.houseCode, 
                                              this.remoteDefinition.typeDefinition.receiverCode, 
                                              Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_ON);
-            console.log("on");
           }.bind(this));
           
           $('#remote-a-off').click(function() {
@@ -60,7 +73,6 @@ function PageRemoteSwitchA() {
             this.remoteBricklet.switchSocket(this.remoteDefinition.typeDefinition.houseCode, 
                                              this.remoteDefinition.typeDefinition.receiverCode, 
                                              Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_OFF);
-            console.log("off");
           }.bind(this));
           
         }.bind(this)

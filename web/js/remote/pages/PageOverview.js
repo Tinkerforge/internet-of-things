@@ -7,7 +7,9 @@ function PageOverview() {
   };
 
   this.addDOMElements = function() {
-    html = 'overview';
+    $('#dashboard-header').hide();
+    html = '<div class="col-sm-8 hidden-xs" id="div-img-overview-left"><img id="img-overview-left" src="img/overview_left.png"></div>' +
+           '<div class="col-sm-4 hidden-xs" id="div-img-overview-right"><img id="img-overview-right" src="img/overview_right.png"></div>';
     $('#dashboard').append(html);
   };
 
@@ -20,6 +22,7 @@ function PageOverview() {
   };
 
   this.stop = function() {
+    $('#dashboard-header').show();
     $('#dashboard').empty();
     this.running = false;
   };

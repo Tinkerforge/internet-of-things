@@ -27,18 +27,22 @@ function RemoteControl() {
   this.currentPage.start();
   
   this.brickMenuClick = function(name, ev) {
+    $('.remote-can-be-active').each(function() {
+      $(this).parent().removeClass('active');
+    });
+    
     if(this.currentPage !== undefined) {
-      $('#remote-page-' + name).parent().removeClass('active');
       this.currentPage.stop();
     }
 
     if(this.pages[name] === undefined) {
-      // TODO: Error page?
+      // TODO: This should not be possible, show error page?
       // this.pages[page] = ErrorPage();
     }
 
     this.currentPage = this.pages[name];
-    $('#dashboard-header').text(this.currentPage.name);
+    $('#dashboard-header').empty();
+    $('#dashboard-header').append(this.currentPage.name);
 
     $('#remote-page-' + name).parent().addClass('active');
     this.currentPage.start();
@@ -59,6 +63,7 @@ function RemoteControl() {
         'text': remote.name,
         'href': '#dashboard-header',
         'id': 'remote-page-' + id,
+        'class': 'remote-can-be-active',
         'click': this.brickMenuClick.bind(this, id)
       });
       

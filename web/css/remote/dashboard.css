@@ -122,3 +122,49 @@
   text-align: center;
   margin-top: 50px;
 }
+
+body {
+  width: 100%; 
+  height: 100%;
+  text-align: center; 
+ /* background-color: #98AFC7; */
+  
+background:
+radial-gradient(black 15%, transparent 16%) 0 0,
+radial-gradient(black 15%, transparent 16%) 8px 8px,
+radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+background-color:#282828;
+background-size:16px 16px;
+}
+
+html {
+  min-height: 100%;
+  position: relative;
+}
+
+#center-container {
+  max-width: 900px; 
+  text-align: left; 
+  margin: 0px auto; 
+  background-color: #FFFFFF;
+  z-index: -1;
+  position: absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  overflow:hidden;
+}
+
+#sidebar-remotes {
+  padding-left: 4px;
+}
+
+#div-img-overview-left {
+  text-align: left; 
+}
+
+#div-img-overview-right {
+  text-align: right; 
+}
