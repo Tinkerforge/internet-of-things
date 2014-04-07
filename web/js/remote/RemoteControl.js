@@ -38,6 +38,7 @@ function RemoteDefinition() {
 function RemoteControl() {
   this.pages = {};
   this.pages['overview'] = new PageOverview();
+  this.pages['settings'] = new PageSettings();
   this.pages['legal-info'] = new PageLegalInfo();
   this.pages['new-remote'] = new PageNewRemote();
   this.pages['edit-remote'] = new PageNewRemote();
@@ -109,6 +110,7 @@ function RemoteControl() {
   };
   
   $('#remote-page-overview').click(this.brickMenuClick.bind(this, 'overview'));
+  $('#remote-page-settings').click(this.brickMenuClick.bind(this, 'settings'));
   $('#remote-page-about').click(this.brickMenuClick.bind(this, 'about'));
   $('#remote-page-legal-info').click(this.brickMenuClick.bind(this, 'legal-info'));
   $('#remote-page-new-remote').click(this.brickMenuClick.bind(this, 'new-remote'));

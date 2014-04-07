@@ -178,5 +178,10 @@ html {
 }
 
 #span-remote-switch-name {
-  float:left;
+  float: left;
+}
+
+#div-remote-settings-id {
+  font-size: 28px;
+  text-align: center;
 }

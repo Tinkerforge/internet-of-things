@@ -4,8 +4,8 @@ function PageOverview() {
 
   this.addDOMElements = function() {
     $('#dashboard-header').hide();
-    html = '<div class="col-sm-8 hidden-xs" id="div-img-overview-left"><img width="336" height="265" id="img-overview-left" src="img/overview_left.png"></div>' +
-           '<div class="col-sm-4 hidden-xs" id="div-img-overview-right"><img width="166" height="198" id="img-overview-right" src="img/overview_right.png"></div>';
+    var html = '<div class="col-sm-8 hidden-xs" id="div-img-overview-left"><img width="336" height="265" id="img-overview-left" src="img/overview_left.png"></div>' +
+               '<div class="col-sm-4 hidden-xs" id="div-img-overview-right"><img width="166" height="198" id="img-overview-right" src="img/overview_right.png"></div>';
     $('#dashboard').append(html);
   };
 

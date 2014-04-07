@@ -1,118 +1,118 @@
 addSwitchAOptions = function() {
-  html = '<div class="form-group">' +
-           '<label class="col-sm-2 control-label">Repeats</label>' +
-           '<div class="col-sm-10">' +
-             '<input class="form-control" type="text" id="new-remote-a-repeats"/>' +
-           '</div>' +
-         '</div>' +
-         '<div class="form-group">' +
-           '<label class="col-sm-2 control-label">House Code</label>' +
-           '<div class="col-sm-10">' +
-             '<label class="checkbox-inline">' +
-               '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-1">1' +
-             '</label>' +
-             '<label class="checkbox-inline">' +
-               '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-2">2' +
-             '</label>' +
-             '<label class="checkbox-inline">' +
-               '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-3">3' +
-             '</label>' +
-             '<label class="checkbox-inline">' +
-               '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-4">4' +
-             '</label>' +
-             '<label class="checkbox-inline">' +
-               '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-5">5' +
-             '</label>' +
-             '<input class="form-control" type="text" id="new-remote-a-house-code"/>' +
-           '</div>' +
-         '</div>' +
-         '<div class="form-group">' +
-           '<label class="col-sm-2 control-label">Receiver Code</label>' +
-           '<div class="col-sm-10">' +
-             '<label class="checkbox-inline">' +
-               '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-1">A' +
-             '</label>' +
-             '<label class="checkbox-inline">' +
-               '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-2">B' +
-             '</label>' +
-             '<label class="checkbox-inline">' +
-               '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-3">C' +
-             '</label>' +
-             '<label class="checkbox-inline">' +
-               '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-4">D' +
-             '</label>' +
-             '<label class="checkbox-inline">' +
-               '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-5">E' +
-             '</label>' +
-             '<input class="form-control" type="text" id="new-remote-a-receiver-code"/>' +
-           '</div>' +
-         '</div>';
+  var html = '<div class="form-group">' +
+               '<label class="col-sm-2 control-label">Repeats</label>' +
+               '<div class="col-sm-10">' +
+                 '<input class="form-control" type="text" id="new-remote-a-repeats"/>' +
+               '</div>' +
+             '</div>' +
+             '<div class="form-group">' +
+               '<label class="col-sm-2 control-label">House Code</label>' +
+               '<div class="col-sm-10">' +
+                 '<label class="checkbox-inline">' +
+                   '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-1">1' +
+                 '</label>' +
+                 '<label class="checkbox-inline">' +
+                   '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-2">2' +
+                 '</label>' +
+                 '<label class="checkbox-inline">' +
+                   '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-3">3' +
+                 '</label>' +
+                 '<label class="checkbox-inline">' +
+                   '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-4">4' +
+                 '</label>' +
+                 '<label class="checkbox-inline">' +
+                   '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-5">5' +
+                 '</label>' +
+                 '<input class="form-control" type="text" id="new-remote-a-house-code"/>' +
+               '</div>' +
+             '</div>' +
+             '<div class="form-group">' +
+               '<label class="col-sm-2 control-label">Receiver Code</label>' +
+               '<div class="col-sm-10">' +
+                 '<label class="checkbox-inline">' +
+                   '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-1">A' +
+                 '</label>' +
+                 '<label class="checkbox-inline">' +
+                   '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-2">B' +
+                 '</label>' +
+                 '<label class="checkbox-inline">' +
+                   '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-3">C' +
+                 '</label>' +
+                 '<label class="checkbox-inline">' +
+                   '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-4">D' +
+                 '</label>' +
+                 '<label class="checkbox-inline">' +
+                   '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-5">E' +
+                 '</label>' +
+                 '<input class="form-control" type="text" id="new-remote-a-receiver-code"/>' +
+               '</div>' +
+             '</div>';
   $('#div-new-remote-type-options').append(html);
 };
 
 addSwitchBOptions = function() {
-  html = '<div class="form-group">' +
-           '<label class="col-sm-2 control-label">Repeats</label>' +
-           '<div class="col-sm-10">' +
-             '<input class="form-control" type="text" id="new-remote-b-repeats"/>' +
-           '</div>' +
-         '</div>' +
-         '<div class="form-group">' +
-           '<label class="col-sm-2 control-label">Address</label>' +
-           '<div class="col-sm-10">' +
-             '<input class="form-control" type="text" id="new-remote-b-address"/>' +
-           '</div>' +
-         '</div>' +
-         '<div class="form-group">' +
-           '<label class="col-sm-2 control-label">Unit</label>' +
-           '<div class="col-sm-8" id="div-new-remote-b-unit">' +
-             '<input class="form-control" type="text" id="new-remote-b-unit"/>' +
-           '</div>' +
-           '<div class="col-sm-2">' +
-             '<label class="checkbox-inline">' +
-               '<input type="checkbox" id="new-remote-b-switch-all" value="sa"> Switch All' +
-             '</label>' +
-           '</div>' +
-         '</div>';
+  var html = '<div class="form-group">' +
+               '<label class="col-sm-2 control-label">Repeats</label>' +
+               '<div class="col-sm-10">' +
+                 '<input class="form-control" type="text" id="new-remote-b-repeats"/>' +
+               '</div>' +
+             '</div>' +
+             '<div class="form-group">' +
+               '<label class="col-sm-2 control-label">Address</label>' +
+               '<div class="col-sm-10">' +
+                 '<input class="form-control" type="text" id="new-remote-b-address"/>' +
+               '</div>' +
+             '</div>' +
+             '<div class="form-group">' +
+               '<label class="col-sm-2 control-label">Unit</label>' +
+               '<div class="col-sm-8" id="div-new-remote-b-unit">' +
+                 '<input class="form-control" type="text" id="new-remote-b-unit"/>' +
+               '</div>' +
+               '<div class="col-sm-2">' +
+                 '<label class="checkbox-inline">' +
+                   '<input type="checkbox" id="new-remote-b-switch-all" value="sa"> Switch All' +
+                 '</label>' +
+               '</div>' +
+             '</div>';
   $('#div-new-remote-type-options').append(html);
 };
 
 addSwitchCOptions = function() {
-  html = '<div class="form-group">' +
-           '<label class="col-sm-2 control-label">Repeats</label>' +
-           '<div class="col-sm-10">' +
-             '<input class="form-control" type="text" id="new-remote-c-repeats"/>' +
-           '</div>' +
-         '</div>' +
-         '<div class="form-group">' +
-           '<label class="col-sm-2 control-label">System Code</label>' +
-           '<div class="col-sm-10">' +
-             '<select id="new-remote-c-system-code" class="form-control">' +
-               '<option value="A">A</option>' +
-               '<option value="B">B</option>' +
-               '<option value="C">C</option>' +
-               '<option value="D">D</option>' +
-               '<option value="E">E</option>' +
-               '<option value="F">F</option>' +
-               '<option value="G">G</option>' +
-               '<option value="H">H</option>' +
-               '<option value="I">I</option>' +
-               '<option value="J">J</option>' +
-               '<option value="K">K</option>' +
-               '<option value="L">L</option>' +
-               '<option value="M">M</option>' +
-               '<option value="N">N</option>' +
-               '<option value="O">O</option>' +
-               '<option value="P">P</option>' +
-             '</select>' +
-           '</div>' +
-         '</div>' +
-         '<div class="form-group">' +
-           '<label class="col-sm-2 control-label">Device Code</label>' +
-           '<div class="col-sm-10" id="div-new-remote-c-device-code">' +
-             '<input class="form-control" type="text" id="new-remote-c-device-code"/>' +
-           '</div>' +
-         '</div>';
+  var html = '<div class="form-group">' +
+               '<label class="col-sm-2 control-label">Repeats</label>' +
+               '<div class="col-sm-10">' +
+                 '<input class="form-control" type="text" id="new-remote-c-repeats"/>' +
+               '</div>' +
+             '</div>' +
+             '<div class="form-group">' +
+               '<label class="col-sm-2 control-label">System Code</label>' +
+               '<div class="col-sm-10">' +
+                 '<select id="new-remote-c-system-code" class="form-control">' +
+                   '<option value="A">A</option>' +
+                   '<option value="B">B</option>' +
+                   '<option value="C">C</option>' +
+                   '<option value="D">D</option>' +
+                   '<option value="E">E</option>' +
+                   '<option value="F">F</option>' +
+                   '<option value="G">G</option>' +
+                   '<option value="H">H</option>' +
+                   '<option value="I">I</option>' +
+                   '<option value="J">J</option>' +
+                   '<option value="K">K</option>' +
+                   '<option value="L">L</option>' +
+                   '<option value="M">M</option>' +
+                   '<option value="N">N</option>' +
+                   '<option value="O">O</option>' +
+                   '<option value="P">P</option>' +
+                 '</select>' +
+               '</div>' +
+             '</div>' +
+             '<div class="form-group">' +
+               '<label class="col-sm-2 control-label">Device Code</label>' +
+               '<div class="col-sm-10" id="div-new-remote-c-device-code">' +
+                 '<input class="form-control" type="text" id="new-remote-c-device-code"/>' +
+               '</div>' +
+             '</div>';
   $('#div-new-remote-type-options').append(html);
 };
 
@@ -192,71 +192,71 @@ function PageNewRemote() {
   };
 
   this.addDOMElements = function() {
-    html = '<form class="form-horizontal" role="form">' +
-             '<div class="form-group">' +
-               '<label for="new-remote-host" class="col-sm-2 control-label">Host</label>' +
-               '<div class="col-sm-10">' +
-                 '<input type="text" class="form-control" id="new-remote-host" placeholder="Host" value="localhost">' +
-               '</div>' +
-             '</div>' +
-             '<div class="form-group">' +
-               '<label for="new-remote-port" class="col-sm-2 control-label">Port</label>' +
-               '<div class="col-sm-10">' +
-                 '<input type="text" class="form-control" id="new-remote-port" value="4280">' +
-               '</div>' +
-             '</div>' +
-             '<div class="form-group">' +
-               '<div class="col-sm-offset-2 col-sm-10">' +
-                 '<div id="new-remote-progress" class="progress progress-striped active">' +
-                   '<div id="new-remote-progress-bar" class="progress-bar" style="width: 0%;"></div>' +
+    var html = '<form class="form-horizontal" role="form">' +
+                 '<div class="form-group">' +
+                   '<label for="new-remote-host" class="col-sm-2 control-label">Host</label>' +
+                   '<div class="col-sm-10">' +
+                     '<input type="text" class="form-control" id="new-remote-host" placeholder="Host" value="localhost">' +
+                   '</div>' +
                  '</div>' +
-               '</div>' +
-             '</div>' +
-             '<div id="div-new-remote-find" class="form-group">' +
-               '<div class="col-sm-offset-2 col-sm-10">' +
-                 '<button type="button" id="new-remote-find" class="btn btn-default">Find Remote Switch Bricklets</button>' +
-               '</div>' +
-             '</div>' +
-             '<div class="form-group">' +
-               '<div class="col-sm-offset-2 col-sm-10">' +
-               '  <div id="new-remote-error">' +
+                 '<div class="form-group">' +
+                   '<label for="new-remote-port" class="col-sm-2 control-label">Port</label>' +
+                   '<div class="col-sm-10">' +
+                     '<input type="text" class="form-control" id="new-remote-port" value="4280">' +
+                   '</div>' +
                  '</div>' +
-               '</div>' +
-             '</div>' +
-             '<div id="div-new-remote-uid" class="form-group">' +
-               '<label for="new-remote-uid" class="col-sm-2 control-label">UID</label>' +
-               '<div class="col-sm-10">' +
-                 '<select id="new-remote-uid" class="form-control">' +
-                   '<option value="choose" selected disabled>Choose UID of Remote Switch Bricklet</option>' +
-                 '</select>' +
-               '</div>' +
-             '</div>' +
-             '<div id="div-new-remote-name" class="form-group">' +
-               '<label for="new-remote-name" class="col-sm-2 control-label">Name</label>' +
-               '<div class="col-sm-10">' +
-                 '<input maxlength="13" type="text" class="form-control" id="new-remote-name" placeholder="Name of Socket (e.g. bedside lamp)">' +
-               '</div>' +
-             '</div>' +
-             '<div id="div-new-remote-type" class="form-group">' +
-               '<label for="new-remote-type" class="col-sm-2 control-label">Type</label>' +
-               '<div class="col-sm-10">' +
-                 '<select id="new-remote-type" class="form-control">' +
-                   '<option value="choose" selected disabled>Choose Type</option>' +
-                   '<option value="A">A Switch</option>' +
-                   '<option value="B">B Switch</option>' +
-                   '<option value="Bd">B Dimmer</option>' +
-                   '<option value="C">C Switch</option>' +
-                 '</select>' +
-               '</div>' +
-             '</div>' +
-             '<div id="div-new-remote-type-options">' +
-             '</div>' +
-             '<div id="div-new-remote-save" class="form-group"> ' +
-               '<div class="col-sm-offset-2 col-sm-10">' +
-                 '<button type="button" id="new-remote-save" class="btn btn-primary">Save</button>' +
-               '</div>' +
-             '</div>' +
-           '</form>';
+                 '<div class="form-group">' +
+                   '<div class="col-sm-offset-2 col-sm-10">' +
+                     '<div id="new-remote-progress" class="progress progress-striped active">' +
+                       '<div id="new-remote-progress-bar" class="progress-bar" style="width: 0%;"></div>' +
+                     '</div>' +
+                   '</div>' +
+                 '</div>' +
+                 '<div id="div-new-remote-find" class="form-group">' +
+                   '<div class="col-sm-offset-2 col-sm-10">' +
+                     '<button type="button" id="new-remote-find" class="btn btn-default">Find Remote Switch Bricklets</button>' +
+                   '</div>' +
+                 '</div>' +
+                 '<div class="form-group">' +
+                   '<div class="col-sm-offset-2 col-sm-10">' +
+                   '  <div id="new-remote-error">' +
+                     '</div>' +
+                   '</div>' +
+                 '</div>' +
+                 '<div id="div-new-remote-uid" class="form-group">' +
+                   '<label for="new-remote-uid" class="col-sm-2 control-label">UID</label>' +
+                   '<div class="col-sm-10">' +
+                     '<select id="new-remote-uid" class="form-control">' +
+                       '<option value="choose" selected disabled>Choose UID of Remote Switch Bricklet</option>' +
+                     '</select>' +
+                   '</div>' +
+                 '</div>' +
+                 '<div id="div-new-remote-name" class="form-group">' +
+                   '<label for="new-remote-name" class="col-sm-2 control-label">Name</label>' +
+                   '<div class="col-sm-10">' +
+                     '<input maxlength="13" type="text" class="form-control" id="new-remote-name" placeholder="Name of Socket (e.g. bedside lamp)">' +
+                   '</div>' +
+                 '</div>' +
+                 '<div id="div-new-remote-type" class="form-group">' +
+                   '<label for="new-remote-type" class="col-sm-2 control-label">Type</label>' +
+                   '<div class="col-sm-10">' +
+                     '<select id="new-remote-type" class="form-control">' +
+                       '<option value="choose" selected disabled>Choose Type</option>' +
+                       '<option value="A">A Switch</option>' +
+                       '<option value="B">B Switch</option>' +
+                       '<option value="Bd">B Dimmer</option>' +
+                       '<option value="C">C Switch</option>' +
+                     '</select>' +
+                   '</div>' +
+                 '</div>' +
+                 '<div id="div-new-remote-type-options">' +
+                 '</div>' +
+                 '<div id="div-new-remote-save" class="form-group"> ' +
+                   '<div class="col-sm-offset-2 col-sm-10">' +
+                     '<button type="button" id="new-remote-save" class="btn btn-primary">Save</button>' +
+                   '</div>' +
+                 '</div>' +
+               '</form>';
     $('#dashboard').append(html);
     
     $('#div-new-remote-uid').hide();
