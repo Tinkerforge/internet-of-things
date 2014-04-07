@@ -1,6 +1,27 @@
-function RemoteTypeA() {
+function RemoteSwitchA() {
   var houseCode;
   var receiverCode;
+  var repeats;
+}
+
+function RemoteSwitchB() {
+  var address;
+  var unit;
+  var switchAll;
+  var repeats;
+}
+
+function RemoteDimmerB() {
+  var address;
+  var unit;
+  var switchAll;
+  var dimValue;
+  var repeats;
+}
+
+function RemoteSwitchC() {
+  var systemCode;
+  var deviceCode;
   var repeats;
 }
 
@@ -19,6 +40,8 @@ function RemoteControl() {
   this.pages['overview'] = new PageOverview();
   this.pages['legal-info'] = new PageLegalInfo();
   this.pages['new-remote'] = new PageNewRemote();
+  this.pages['edit-remote'] = new PageNewRemote();
+  this.pages['edit-remote'].setEdit();
   
   this.remotes = [];
 
@@ -76,14 +99,7 @@ function RemoteControl() {
       });
       
       if(this.pages[id] === undefined) {
-        switch(remote.type) {
-          case 'Type A': {
-            this.pages[id] = new PageRemoteSwitchA();
-            break;
-          }
-          
-          // TODO: Other types
-        }
+        this.pages[id] = new PageRemoteSwitch();
       }
       this.pages[id].setRemoteDefinition(remote);
 

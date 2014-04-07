@@ -1,7 +1,195 @@
+addSwitchAOptions = function() {
+  html = '<div class="form-group">' +
+           '<label class="col-sm-2 control-label">Repeats</label>' +
+           '<div class="col-sm-10">' +
+             '<input class="form-control" type="text" id="new-remote-a-repeats"/>' +
+           '</div>' +
+         '</div>' +
+         '<div class="form-group">' +
+           '<label class="col-sm-2 control-label">House Code</label>' +
+           '<div class="col-sm-10">' +
+             '<label class="checkbox-inline">' +
+               '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-1">1' +
+             '</label>' +
+             '<label class="checkbox-inline">' +
+               '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-2">2' +
+             '</label>' +
+             '<label class="checkbox-inline">' +
+               '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-3">3' +
+             '</label>' +
+             '<label class="checkbox-inline">' +
+               '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-4">4' +
+             '</label>' +
+             '<label class="checkbox-inline">' +
+               '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-5">5' +
+             '</label>' +
+             '<input class="form-control" type="text" id="new-remote-a-house-code"/>' +
+           '</div>' +
+         '</div>' +
+         '<div class="form-group">' +
+           '<label class="col-sm-2 control-label">Receiver Code</label>' +
+           '<div class="col-sm-10">' +
+             '<label class="checkbox-inline">' +
+               '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-1">A' +
+             '</label>' +
+             '<label class="checkbox-inline">' +
+               '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-2">B' +
+             '</label>' +
+             '<label class="checkbox-inline">' +
+               '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-3">C' +
+             '</label>' +
+             '<label class="checkbox-inline">' +
+               '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-4">D' +
+             '</label>' +
+             '<label class="checkbox-inline">' +
+               '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-5">E' +
+             '</label>' +
+             '<input class="form-control" type="text" id="new-remote-a-receiver-code"/>' +
+           '</div>' +
+         '</div>';
+  $('#div-new-remote-type-options').append(html);
+};
+
+addSwitchBOptions = function() {
+  html = '<div class="form-group">' +
+           '<label class="col-sm-2 control-label">Repeats</label>' +
+           '<div class="col-sm-10">' +
+             '<input class="form-control" type="text" id="new-remote-b-repeats"/>' +
+           '</div>' +
+         '</div>' +
+         '<div class="form-group">' +
+           '<label class="col-sm-2 control-label">Address</label>' +
+           '<div class="col-sm-10">' +
+             '<input class="form-control" type="text" id="new-remote-b-address"/>' +
+           '</div>' +
+         '</div>' +
+         '<div class="form-group">' +
+           '<label class="col-sm-2 control-label">Unit</label>' +
+           '<div class="col-sm-8" id="div-new-remote-b-unit">' +
+             '<input class="form-control" type="text" id="new-remote-b-unit"/>' +
+           '</div>' +
+           '<div class="col-sm-2">' +
+             '<label class="checkbox-inline">' +
+               '<input type="checkbox" id="new-remote-b-switch-all" value="sa"> Switch All' +
+             '</label>' +
+           '</div>' +
+         '</div>';
+  $('#div-new-remote-type-options').append(html);
+};
+
+addSwitchCOptions = function() {
+  html = '<div class="form-group">' +
+           '<label class="col-sm-2 control-label">Repeats</label>' +
+           '<div class="col-sm-10">' +
+             '<input class="form-control" type="text" id="new-remote-c-repeats"/>' +
+           '</div>' +
+         '</div>' +
+         '<div class="form-group">' +
+           '<label class="col-sm-2 control-label">System Code</label>' +
+           '<div class="col-sm-10">' +
+             '<select id="new-remote-c-system-code" class="form-control">' +
+               '<option value="A">A</option>' +
+               '<option value="B">B</option>' +
+               '<option value="C">C</option>' +
+               '<option value="D">D</option>' +
+               '<option value="E">E</option>' +
+               '<option value="F">F</option>' +
+               '<option value="G">G</option>' +
+               '<option value="H">H</option>' +
+               '<option value="I">I</option>' +
+               '<option value="J">J</option>' +
+               '<option value="K">K</option>' +
+               '<option value="L">L</option>' +
+               '<option value="M">M</option>' +
+               '<option value="N">N</option>' +
+               '<option value="O">O</option>' +
+               '<option value="P">P</option>' +
+             '</select>' +
+           '</div>' +
+         '</div>' +
+         '<div class="form-group">' +
+           '<label class="col-sm-2 control-label">Device Code</label>' +
+           '<div class="col-sm-10" id="div-new-remote-c-device-code">' +
+             '<input class="form-control" type="text" id="new-remote-c-device-code"/>' +
+           '</div>' +
+         '</div>';
+  $('#div-new-remote-type-options').append(html);
+};
+
 function PageNewRemote() {
   this.name = "New Remote...";
   this.running = false;
   this.connectTimeout = null;
+  this.editRemoteId = -1; // -1 = new remote
+  
+  this.setEdit = function() {
+    this.name = "Edit Remote...";
+  };
+  
+  this.editRemote = function() {
+    var r = remoteControl.remotes[this.editRemoteId];
+    
+    $('#new-remote-host').val(r.host);
+    $('#new-remote-port').val(r.port);
+    
+    $('#new-remote-uid').append('<option value="' + r.uid + '">' + r.uid + '</option>');
+    $('#new-remote-uid option[value="choose"]').prop('selected', false);
+    $('#new-remote-uid option[value="' + r.uid + '"]').prop('selected', true);
+    $('#div-new-remote-uid').show();
+    
+    $('#div-new-remote-name').show();
+    $('#new-remote-name').val(r.name);
+    var e = $.Event("keyup");
+    e.keyCode = 13;
+    $('#new-remote-name').trigger(e);
+    
+    $('#new-remote-type option[value="choose"]').prop('selected', false);
+    $('#div-new-remote-type').show();
+    
+    switch(r.type) {
+      case 'A Switch':
+        $('#new-remote-type option[value="A"]').prop('selected', true);
+        $('#new-remote-type option[value="A"]').trigger('change');
+        
+        $('#new-remote-a-repeats').val(r.typeDefinition.repeats);
+        $('#new-remote-a-house-code').val(r.typeDefinition.houseCode);
+        $('#new-remote-a-house-code').trigger('change');
+        $('#new-remote-a-receiver-code').val(r.typeDefinition.receiverCode);
+        $('#new-remote-a-receiver-code').trigger('change');
+        break;
+        
+      case 'B Switch':
+        $('#new-remote-type option[value="B"]').prop('selected', true);
+        $('#new-remote-type option[value="B"]').trigger('change');
+        
+        $('#new-remote-b-repeats').val(r.typeDefinition.repeats);
+        $('#new-remote-b-address').val(r.typeDefinition.address);
+        $('#new-remote-b-unit').val(r.typeDefinition.unit);
+        $('#new-remote-b-switch-all').prop('checked', r.typeDefinition.switchAll);
+        $('#new-remote-b-switch-all').trigger('change');
+        break;
+        
+      case 'B Dimmer':
+        $('#new-remote-type option[value="Bd"]').prop('selected', true);
+        $('#new-remote-type option[value="Bd"]').trigger('change');
+        
+        $('#new-remote-b-repeats').val(r.typeDefinition.repeats);
+        $('#new-remote-b-address').val(r.typeDefinition.address);
+        $('#new-remote-b-unit').val(r.typeDefinition.unit);
+        $('#new-remote-b-switch-all').prop('checked', r.typeDefinition.switchAll);
+        $('#new-remote-b-switch-all').trigger('change');
+        break;
+        
+      case 'C Switch':
+        $('#new-remote-type option[value="C"]').prop('selected', true);
+        $('#new-remote-type option[value="C"]').trigger('change');
+        
+        $('#new-remote-c-repeats').val(r.typeDefinition.repeats);
+        $('#new-remote-c-device-code').val(r.typeDefinition.deviceCode);
+        $('#new-remote-c-system-code option[value="' + r.typeDefinition.systemCode + '"]').prop('selected', true);
+        break;
+    }
+  };
 
   this.addDOMElements = function() {
     html = '<form class="form-horizontal" role="form">' +
@@ -24,15 +212,15 @@ function PageNewRemote() {
                  '</div>' +
                '</div>' +
              '</div>' +
-             '<div class="form-group">' +
-               '<div class="col-sm-offset-2 col-sm-10">' +
-                 '<div id="new-remote-error">' +
-                 '</div>' +
-               '</div>' +
-             '</div>' +
              '<div id="div-new-remote-find" class="form-group">' +
                '<div class="col-sm-offset-2 col-sm-10">' +
                  '<button type="button" id="new-remote-find" class="btn btn-default">Find Remote Switch Bricklets</button>' +
+               '</div>' +
+             '</div>' +
+             '<div class="form-group">' +
+               '<div class="col-sm-offset-2 col-sm-10">' +
+               '  <div id="new-remote-error">' +
+                 '</div>' +
                '</div>' +
              '</div>' +
              '<div id="div-new-remote-uid" class="form-group">' +
@@ -54,9 +242,10 @@ function PageNewRemote() {
                '<div class="col-sm-10">' +
                  '<select id="new-remote-type" class="form-control">' +
                    '<option value="choose" selected disabled>Choose Type</option>' +
-                   '<option value="A">Type A</option>' +
-                   '<option value="B">Type B</option>' +
-                   '<option value="C">Type C</option>' +
+                   '<option value="A">A Switch</option>' +
+                   '<option value="B">B Switch</option>' +
+                   '<option value="Bd">B Dimmer</option>' +
+                   '<option value="C">C Switch</option>' +
                  '</select>' +
                '</div>' +
              '</div>' +
@@ -105,35 +294,70 @@ function PageNewRemote() {
       $('#new-remote-save').click(function(e) {
         e.preventDefault();
         
-        var rd = new RemoteDefinition();
+        var rd = null;
+        if(this.editRemoteId == -1) {
+          rd = new RemoteDefinition();
+        } else {
+          rd = remoteControl.remotes[this.editRemoteId];
+        }
         rd.host = $('#new-remote-host').val();
         rd.port = parseInt($('#new-remote-port').val());
         rd.uid = $('#new-remote-uid').find(':selected').text();
         rd.name = $('#new-remote-name').val();
         rd.type = $('#new-remote-type').find(':selected').text();
         switch(rd.type) {
-          case 'Type A':
-            var a = new RemoteTypeA();
-            a.repeats = 5; // TODO: get from user
+          case 'A Switch':
+            var a = new RemoteSwitchA();
+            a.repeats = parseInt($('#new-remote-a-repeats').val());
             a.houseCode = parseInt($('#new-remote-a-house-code').val());
             a.receiverCode = parseInt($('#new-remote-a-receiver-code').val());
             rd.typeDefinition = a;
             break;
             
-          case 'Type B':
+          case 'B Switch':
+            var b = new RemoteSwitchB();
+            b.repeats = parseInt($('#new-remote-b-repeats').val());
+            b.address = parseInt($('#new-remote-b-address').val());
+            b.unit = parseInt($('#new-remote-b-unit').val());
+            b.switchAll = $('#new-remote-b-switch-all').prop('checked');
+            rd.typeDefinition = b;
             break;
             
-          case 'Type C':
+          case 'B Dimmer':
+            var b = new RemoteDimmerB();
+            b.repeats = parseInt($('#new-remote-b-repeats').val());
+            b.address = parseInt($('#new-remote-b-address').val());
+            b.unit = parseInt($('#new-remote-b-unit').val());
+            b.switchAll = $('#new-remote-b-switch-all').prop('checked');
+            b.dimValue = 0;
+            rd.typeDefinition = b;
+            break;
+            
+          case 'C Switch':
+            var c = new RemoteSwitchC();
+            c.repeats = parseInt($('#new-remote-c-repeats').val());
+            c.deviceCode = parseInt($('#new-remote-c-device-code').val());
+            c.systemCode =$('#new-remote-c-system-code').find(':selected').text();
+            rd.typeDefinition = c;
             break;
         }
         
-        remoteControl.remotes.push(rd);
+        var num = rd.num;
+        if(this.editRemoteId === -1) {
+          remoteControl.remotes.push(rd);
+        }
+        
         remoteControl.updateMenu(remoteControl.remotes);
-        var id = '#remote-page-remote-' + remoteControl.remotes[remoteControl.remotes.length-1].num;
+        
+        if(this.editRemoteId === -1) {
+          num = remoteControl.remotes[remoteControl.remotes.length-1].num;
+        }
+        
+        var id = '#remote-page-remote-' + num;
         $(id).trigger('click');
         
-        $.cookie("remotes", remoteControl.remotes);
-      });
+        $.cookie("remotes", remoteControl.remotes, {expires : 365});
+      }.bind(this));
       
       $('#new-remote-find').click(function(e) {
         e.preventDefault();
@@ -237,62 +461,28 @@ function PageNewRemote() {
       });
       
       $('#new-remote-name').keyup(function() {
-        var value = $(this).val();
+        var value = $('#new-remote-name').val();
         if(value.length > 0) {
           $('#div-new-remote-type').show();
         } else {
           this.removeElements(1);
         }
-      });
+      }.bind(this));
       
       $('#new-remote-type').on('change', function(e) {
         $('#div-new-remote-save').show();
         $('#div-new-remote-type-options').empty();
         switch(this.value) {
           case "A":
-            html = '<div class="form-group">' +
-                     '<label class="col-sm-2 control-label">House Code</label>' +
-                     '<div class="col-sm-10">' +
-                       '<label class="checkbox-inline">' +
-                         '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-1">1' +
-                       '</label>' +
-                       '<label class="checkbox-inline">' +
-                         '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-2">2' +
-                       '</label>' +
-                       '<label class="checkbox-inline">' +
-                         '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-3">3' +
-                       '</label>' +
-                       '<label class="checkbox-inline">' +
-                         '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-4">4' +
-                       '</label>' +
-                       '<label class="checkbox-inline">' +
-                         '<input type="checkbox" class="new-remote-a-house-code-checkbox" id="new-remote-a-house-code-5">5' +
-                       '</label>' +
-                       '<input class="form-control" type="text" id="new-remote-a-house-code"/>' +
-                     '</div>' +
-                   '</div>' +
-                   '<div class="form-group">' +
-                     '<label class="col-sm-2 control-label">Receiver Code</label>' +
-                     '<div class="col-sm-10">' +
-                       '<label class="checkbox-inline">' +
-                         '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-1">A' +
-                       '</label>' +
-                       '<label class="checkbox-inline">' +
-                         '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-2">B' +
-                       '</label>' +
-                       '<label class="checkbox-inline">' +
-                         '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-3">C' +
-                       '</label>' +
-                       '<label class="checkbox-inline">' +
-                         '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-4">D' +
-                       '</label>' +
-                       '<label class="checkbox-inline">' +
-                         '<input type="checkbox" class="new-remote-a-receiver-code-checkbox" id="new-remote-a-receiver-code-5">E' +
-                       '</label>' +
-                       '<input class="form-control" type="text" id="new-remote-a-receiver-code"/>' +
-                     '</div>' +
-                   '</div>';
-            $('#div-new-remote-type-options').append(html);
+            addSwitchAOptions();
+            
+            $('#new-remote-a-repeats').TouchSpin({
+              min: 4,
+              max: 32,
+              stepinterval: 1,
+              maxboostedstep: 1,
+              initval: 8,
+            });
             
             $('#new-remote-a-house-code').TouchSpin({
               min: 0,
@@ -357,18 +547,79 @@ function PageNewRemote() {
                 }
               }
             });
+            break;
+            
+          case "Bd":
+          case "B":
+            addSwitchBOptions();
+            
+            $('#new-remote-b-repeats').TouchSpin({
+              min: 4,
+              max: 32,
+              stepinterval: 1,
+              maxboostedstep: 1,
+              initval: 8,
+            });
+            
+            $('#new-remote-b-address').TouchSpin({
+              min: 0,
+              max: 67108863,
+              stepinterval: 1,
+              maxboostedstep: 100,
+              initval: 0,
+            });
+            
+            $('#new-remote-b-unit').TouchSpin({
+              min: 0,
+              max: 15,
+              stepinterval: 1,
+              maxboostedstep: 1,
+              initval: 0,
+            });
+            
+            $('#new-remote-b-switch-all').change(function() {
+              if($(this).is(":checked")) {
+                $('#new-remote-b-unit').prop('disabled', true);
+                $('#div-new-remote-b-unit button').prop('disabled', true);
+              } else {
+                $('#new-remote-b-unit').prop('disabled', false);
+                $('#div-new-remote-b-unit button').prop('disabled', false);
+              }  
+            });
             
             break;
-          case "B":
-            break;
-          case "A":
+            
+          case "C":
+            addSwitchCOptions();
+            
+            $('#new-remote-c-repeats').TouchSpin({
+              min: 4,
+              max: 32,
+              stepinterval: 1,
+              maxboostedstep: 1,
+              initval: 8,
+            });
+            
+            $('#new-remote-c-device-code').TouchSpin({
+              min: 1,
+              max: 16,
+              stepinterval: 1,
+              maxboostedstep: 1,
+              initval: 1,
+            });
+            
             break;
         }
       });
     }
+    
+    if(this.editRemoteId !== -1) {
+      this.editRemote();
+    }
   };
 
   this.stop = function() {
+    clearTimeout(this.connectTimeout);
     $('#dashboard').empty();
     this.running = false;
   };

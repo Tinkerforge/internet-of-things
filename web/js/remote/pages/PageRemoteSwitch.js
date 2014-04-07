@@ -1,35 +1,155 @@
-function PageRemoteSwitchA() {
-  this.name = "Remote Switch";
+function PageRemoteSwitch() {
+  this.name = "Remote Switch Placeholder";
   this.remoteDefinition = null; 
   this.running = false;
   this.ipcon = null;
   this.remoteBricklet = null;
+  this.buttonsEnabled = true;
+  this.updateStatusTimeout = null;
 
   this.setRemoteDefinition = function(remoteDefinition) {
     this.remoteDefinition = remoteDefinition;
-    var edit = '<span id="remote-switch-a-buttons"><button id="remote-switch-edit" type="button" class="btn btn-default btn-sm">' +
-                 '<span class="glyphicon glyphicon-wrench"></span> Edit' +
-               '</button>';
+    var name = '<span id="span-remote-switch-name">' + remoteDefinition.name + '</span> ';
+    var edit =   '<span id="remote-switch-buttons">' +
+                   '<button id="remote-switch-edit" type="button" class="btn btn-default btn-sm">' +
+                     '<span class="glyphicon glyphicon-wrench"></span> Edit' +
+                   '</button>';
     
-    var remove = '<button id="remote-switch-remove" type="button" class="btn btn-default btn-sm">' +
-                   '<span class="glyphicon glyphicon-remove"></span> Remove' +
-                 '</button></span><span class="clearfix"></span>';
-    this.name = remoteDefinition.name + ' ' + edit + ' ' + remove;
+    var remove =   '<button id="remote-switch-remove" type="button" class="btn btn-default btn-sm">' +
+                     '<span class="glyphicon glyphicon-remove"></span> Remove' +
+                   '</button></span><span class="clearfix">' +
+                 '</span>';
+    
+    this.name = name + edit + ' ' + remove;
   };
 
   this.addDOMElements = function() {
-    html = '<div class="col-sm-12">' +
-             '<p>' +
-               '<span id="remote-a-connection" class="label label-warning">Connecting...</span>' +
-             '</p>' +
-             '<p>' +
-               '<button id="remote-a-on" type="button" class="btn btn-primary btn-block btn-lg">On</button>' +
-               '<button id="remote-a-off" type="button" class="btn btn-primary btn-block btn-lg">Off</button>' +
-             '</p>' +
-           '</div>';
+    var html = '<div class="col-sm-12">' +
+                 '<p>' +
+                   '<span id="remote-switch-connection" class="label label-warning">Connecting...</span>' +
+                 '</p>';
+    switch(this.remoteDefinition.type) {
+      case 'A Switch':
+      case 'B Switch':
+      case 'C Switch':
+        html += '<p>' +
+                  '<button id="remote-switch-on" type="button" class="btn btn-primary btn-block btn-lg">On</button>' +
+                  '<button id="remote-switch-off" type="button" class="btn btn-primary btn-block btn-lg">Off</button>' +
+                '</p>';
+        break;
+        
+      case 'B Dimmer':
+        html += '<form class="form-horizontal" role="form">' +
+                  '<div class="form-group">' +
+                    '<label class="col-sm-2 control-label">Dim Value</label>' +
+                    '<div id="div-remote-switch-dim-value" class="col-sm-10">' +
+                      '<input class="form-control" type="text" id="remote-switch-dim-value"/>' +
+                    '</div>' +
+                  '</div>' +
+                  '<div class="form-group">' +
+                    '<div class="col-sm-offset-2 col-sm-10">' +
+                      '<button id="remote-switch-dim" type="button" class="btn btn-primary btn-block btn-lg">Dim</button>' +
+                    '</div>' +
+                  '</div>' +
+                '</form>';
+        break;
+    }
+    
+    
+    html += '</div>';
+    
+    var switchName = "Switching... ";
+    if(this.remoteDefinition.type === 'B Dimmer') {
+      switchName = "Dimming... ";
+    }
+    
+    var switching = '<div id="remote-switch-switching" class="col-sm-12">' +
+                      '<h3><span id="remote-switch-switching-name">' + switchName + '</span><img width="50" height="66" src=img/switching.gif></h3>';
+                    '</div>';
+                
+    html += switching;
+
     $('#dashboard').append(html);
-    $('#remote-a-on').attr('disabled', true);
-    $('#remote-a-off').attr('disabled', true);
+    
+    $('#remote-switch-switching').hide();
+    
+    // Configure touchspin here already, otherwise we can't disable the buttons
+    $('#remote-switch-dim-value').TouchSpin({
+      min: 0,
+      max: 15,
+      stepinterval: 1,
+      maxboostedstep: 1,
+      initval: this.remoteDefinition.typeDefinition.dimValue,
+    });
+    
+    this.buttonsEnabled = true;
+    this.disableButtons();
+  };
+  
+  this.disableButtons = function() {
+    if(this.buttonsEnabled === false) {
+      return;
+    } 
+    this.buttonsEnabled = false;
+    
+    switch(this.remoteDefinition.type) {
+      case 'A Switch':
+      case 'B Switch':
+      case 'C Switch':
+        $('#remote-switch-on').prop('disabled', true);
+        $('#remote-switch-off').prop('disabled', true);
+        break;
+        
+      case 'B Dimmer':
+        $('#remote-switch-dim-value').prop('disabled', true);
+        $('#remote-switch-dim').prop('disabled', true);
+        $('#div-remote-switch-dim-value button').prop('disabled', true);
+        break;
+    }
+  };
+  
+  this.enableButtons = function() {
+    if(this.buttonsEnabled === true) {
+      return;
+    } 
+    this.buttonsEnabled = true;
+    
+    switch(this.remoteDefinition.type) {
+      case 'A Switch':
+      case 'B Switch':
+      case 'C Switch':
+        $('#remote-switch-on').attr('disabled', false);
+        $('#remote-switch-off').attr('disabled', false);
+        break;
+        
+      case 'B Dimmer':
+        $('#remote-switch-dim-value').prop('disabled', false);
+        $('#remote-switch-dim').prop('disabled', false);
+        $('#div-remote-switch-dim-value button').prop('disabled', false);
+        break;
+    }
+  };
+  
+  this.updateStatus = function() {
+    this.remoteBricklet.getSwitchingState(
+      function(state) {
+        if(state === Tinkerforge.BrickletRemoteSwitch.SWITCHING_STATE_READY) {
+          this.enableButtons();
+          $('#remote-switch-switching').hide();
+        } else {
+          this.disableButtons();
+          $('#remote-switch-switching').show();
+        }
+        this.updateStatusTimeout = setTimeout(this.updateStatus.bind(this), 1000);
+      }.bind(this),
+      function(error) {
+        $('#remote-switch-connection').text('Connection to Remote Switch Bricklet "' + this.remoteDefinition.uid + '" lost (Error: ' + error.toString() + ')');
+        $('#remote-switch-connection').addClass('label-danger');
+        $('#remote-switch-connection').removeClass('label-warning');
+        $('#remote-switch-connection').removeClass('label-success');
+        this.disableButtons();
+      }.bind(this)
+    );
   };
   
   this.start = function() {
@@ -37,42 +157,88 @@ function PageRemoteSwitchA() {
       this.addDOMElements();
       this.running = true;
       
-      // TODO: call getter in regular intervals after connection
-      // TODO: Write "Connection lost..." if no answer
-
       this.ipcon = new Tinkerforge.IPConnection();
       this.ipcon.connect(this.remoteDefinition.host, this.remoteDefinition.port,
         function(error) {
-          $('#remote-a-connection').text('Could not connect to ' + this.remoteDefinition.host + ':' + this.remoteDefinition.port.toString() + ' (Error: ' + error.toString() + ')');
-          $('#remote-a-connection').addClass('label-danger');
-          $('#remote-a-connection').removeClass('label-warning');
+          $('#remote-switch-connection').text('Could not connect to ' + this.remoteDefinition.host + ':' + this.remoteDefinition.port.toString() + ' (Error: ' + error.toString() + ')');
+          $('#remote-switch-connection').addClass('label-danger');
+          $('#remote-switch-connection').removeClass('label-warning');
           this.ipcon.disconnect();
         }.bind(this)
       );
 
       this.ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
         function(connectReason) {
-          $('#remote-a-connection').text('Connection to ' + this.remoteDefinition.host + ':' + this.remoteDefinition.port.toString() + ' established');
-          $('#remote-a-connection').addClass('label-success');
-          $('#remote-a-connection').removeClass('label-warning');
-          $('#remote-a-on').attr('disabled', false);
-          $('#remote-a-off').attr('disabled', false);
+          $('#remote-switch-connection').text('Connection to ' + this.remoteDefinition.host + ':' + this.remoteDefinition.port.toString() + ' established');
+          $('#remote-switch-connection').addClass('label-success');
+          $('#remote-switch-connection').removeClass('label-warning');
           
+          this.enableButtons();
           this.remoteBricklet = new Tinkerforge.BrickletRemoteSwitch(this.remoteDefinition.uid, this.ipcon);
-          // TODO: call getter and remove "Connecting...", otherwise write "Could not find Remote Switch with UID XXX"
           
-          $('#remote-a-on').click(function() {
+          this.updateStatusTimeout = setTimeout(this.updateStatus.bind(this), 1000);
+          
+          $('#remote-switch-dim').click(function() {
+            this.disableButtons();
+            $('#remote-switch-switching').show();
             this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
-            this.remoteBricklet.switchSocket(this.remoteDefinition.typeDefinition.houseCode, 
-                                             this.remoteDefinition.typeDefinition.receiverCode, 
-                                             Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_ON);
+            this.remoteBricklet.dimSocketB(this.remoteDefinition.typeDefinition.address, 
+                                           this.remoteDefinition.typeDefinition.unit, 
+                                           parseInt($('#remote-switch-dim-value').val()));
           }.bind(this));
           
-          $('#remote-a-off').click(function() {
-            this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
-            this.remoteBricklet.switchSocket(this.remoteDefinition.typeDefinition.houseCode, 
-                                             this.remoteDefinition.typeDefinition.receiverCode, 
-                                             Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_OFF);
+          $('#remote-switch-on').click(function() {
+            this.disableButtons();
+            $('#remote-switch-switching').show();
+            switch(this.remoteDefinition.type) {
+              case 'A Switch':
+                this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
+                this.remoteBricklet.switchSocketA(this.remoteDefinition.typeDefinition.houseCode, 
+                                                  this.remoteDefinition.typeDefinition.receiverCode, 
+                                                  Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_ON);
+                break;
+
+              case 'B Switch':
+                this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
+                this.remoteBricklet.switchSocketB(this.remoteDefinition.typeDefinition.address, 
+                                                  this.remoteDefinition.typeDefinition.unit, 
+                                                  Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_ON);
+                break;
+                
+              case 'C Switch':
+                this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
+                this.remoteBricklet.switchSocketC(this.remoteDefinition.typeDefinition.systemCode, 
+                                                  this.remoteDefinition.typeDefinition.deviceCode, 
+                                                  Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_ON);
+                break;
+            }
+          }.bind(this));
+          
+          $('#remote-switch-off').click(function() {
+            this.disableButtons();
+            $('#remote-switch-switching').show();
+            switch(this.remoteDefinition.type) {
+              case 'A Switch':
+                this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
+                this.remoteBricklet.switchSocketA(this.remoteDefinition.typeDefinition.houseCode, 
+                                                  this.remoteDefinition.typeDefinition.receiverCode, 
+                                                  Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_OFF);
+                break;
+                
+              case 'B Switch':
+                this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
+                this.remoteBricklet.switchSocketA(this.remoteDefinition.typeDefinition.address, 
+                                                  this.remoteDefinition.typeDefinition.unit, 
+                                                  Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_OFF);
+                break;
+                
+              case 'C Switch':
+                this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
+                this.remoteBricklet.switchSocketC(this.remoteDefinition.typeDefinition.systemCode, 
+                                                  this.remoteDefinition.typeDefinition.deviceCode, 
+                                                  Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_OFF);
+                break;
+            }
           }.bind(this));
           
         }.bind(this)
@@ -80,17 +246,23 @@ function PageRemoteSwitchA() {
       
       $('#remote-switch-remove').click(function(e) {
         e.preventDefault();
-        console.log(this.remoteDefinition.num);
-        console.log("click");
         remoteControl.remotes.splice(this.remoteDefinition.num, 1);
         remoteControl.updateMenu(remoteControl.remotes);
-        $.cookie("remotes", remoteControl.remotes);
+        $.cookie("remotes", remoteControl.remotes, {expires : 365});
         $('#remote-page-overview').trigger('click');
+      }.bind(this));
+      
+      $('#remote-switch-edit').click(function(e) {
+        e.preventDefault();
+        remoteControl.pages['edit-remote'].editRemoteId = this.remoteDefinition.num;
+        remoteControl.brickMenuClick('edit-remote');
       }.bind(this));
     }
   };
 
   this.stop = function() {
+    clearTimeout(this.updateStatusTimeout);
+    
     $('#dashboard').empty();
     if(this.ipcon !== null) {
       this.ipcon.disconnect();

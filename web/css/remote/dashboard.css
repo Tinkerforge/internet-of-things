@@ -165,6 +165,18 @@ html {
   text-align: right; 
 }
 
-#remote-switch-a-buttons {
+#remote-switch-buttons {
   float: right;
+}
+
+.progress {
+  margin-bottom: 0px;
+}
+
+#remote-switch-switching {
+  text-align: center;
+}
+
+#span-remote-switch-name {
+  float:left;
 }
