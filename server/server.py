@@ -38,7 +38,6 @@ class RemoteControlSaveProtocol(WebSocketServerProtocol):
         letter = random.choice('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ')
         number = str(random.randrange(0, 100000))
         configurationID = letter + number
-        print "configurationID:", configurationID
         return configurationID
 
     def onMessage(self, payload, isBinary):
