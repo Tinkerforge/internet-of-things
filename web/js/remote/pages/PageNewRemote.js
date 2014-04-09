@@ -357,6 +357,7 @@ function PageNewRemote() {
         $(id).trigger('click');
         
         $.cookie("remotes", remoteControl.remotes, {expires : 365});
+        $.cookie("configurationID", null);
       }.bind(this));
       
       $('#new-remote-find').click(function(e) {

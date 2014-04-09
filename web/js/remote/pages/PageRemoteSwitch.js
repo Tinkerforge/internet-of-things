@@ -26,7 +26,14 @@ function PageRemoteSwitch() {
   this.addDOMElements = function() {
     var html = '<div class="col-sm-12">' +
                  '<p>' +
-                   '<span id="remote-switch-connection" class="label label-warning">Connecting...</span>' +
+                   '<span id="remote-switch-connection" class="label label-warning">' +
+                     'Connecting...' +
+                   '</span>' +
+                   '<button id="remote-switch-connection-retry-button" type="button" class="btn btn-default btn-xs">' +
+                     '<span class="glyphicon glyphicon-repeat" id="remote-switch-connection-retry">' +
+                       ' Retry' +
+                     '</span>' +
+                   '</button>' +
                  '</p>';
     switch(this.remoteDefinition.type) {
       case 'A Switch':
@@ -72,6 +79,7 @@ function PageRemoteSwitch() {
     $('#dashboard').append(html);
     
     $('#remote-switch-switching').hide();
+    $('#remote-switch-connection-retry-button').hide();
     
     // Configure touchspin here already, otherwise we can't disable the buttons
     $('#remote-switch-dim-value').TouchSpin({
@@ -128,6 +136,10 @@ function PageRemoteSwitch() {
         $('#div-remote-switch-dim-value button').prop('disabled', false);
         break;
     }
+    
+    $('#remote-switch-connection').text('Connection to ' + this.remoteDefinition.host + ':' + this.remoteDefinition.port.toString() + ' established');
+    $('#remote-switch-connection').addClass('label-success');
+    $('#remote-switch-connection').removeClass('label-warning');
   };
   
   this.updateStatus = function() {
@@ -148,6 +160,7 @@ function PageRemoteSwitch() {
         $('#remote-switch-connection').removeClass('label-warning');
         $('#remote-switch-connection').removeClass('label-success');
         this.disableButtons();
+        $('#remote-switch-connection-retry-button').show();
       }.bind(this)
     );
   };
@@ -164,16 +177,12 @@ function PageRemoteSwitch() {
           $('#remote-switch-connection').addClass('label-danger');
           $('#remote-switch-connection').removeClass('label-warning');
           this.ipcon.disconnect();
+          $('#remote-switch-connection-retry-button').show();
         }.bind(this)
       );
 
       this.ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
         function(connectReason) {
-          $('#remote-switch-connection').text('Connection to ' + this.remoteDefinition.host + ':' + this.remoteDefinition.port.toString() + ' established');
-          $('#remote-switch-connection').addClass('label-success');
-          $('#remote-switch-connection').removeClass('label-warning');
-          
-          this.enableButtons();
           this.remoteBricklet = new Tinkerforge.BrickletRemoteSwitch(this.remoteDefinition.uid, this.ipcon);
           
           this.updateStatusTimeout = setTimeout(this.updateStatus.bind(this), 1000);
@@ -249,6 +258,7 @@ function PageRemoteSwitch() {
         remoteControl.remotes.splice(this.remoteDefinition.num, 1);
         remoteControl.updateMenu(remoteControl.remotes);
         $.cookie("remotes", remoteControl.remotes, {expires : 365});
+        $.cookie("configurationID", configurationID, {expires : 365});
         $('#remote-page-overview').trigger('click');
       }.bind(this));
       
@@ -256,6 +266,10 @@ function PageRemoteSwitch() {
         e.preventDefault();
         remoteControl.pages['edit-remote'].editRemoteId = this.remoteDefinition.num;
         remoteControl.brickMenuClick('edit-remote');
+      }.bind(this));
+      
+      $('#remote-switch-connection-retry-button').click(function() {
+        remoteControl.brickMenuClick('remote-' + this.remoteDefinition.num);
       }.bind(this));
     }
   };

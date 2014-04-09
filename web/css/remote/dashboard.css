@@ -185,3 +185,7 @@ html {
   font-size: 28px;
   text-align: center;
 }
+
+#remote-switch-connection {
+  margin-right: 10px;
+}
