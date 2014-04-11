@@ -93,6 +93,8 @@ function PageSettings() {
         $.cookie("configurationID", configurationID, {expires : 365});
         
         remoteControl.updateMenu(remoteControl.remotes);
+        $.cookie("remotes", remoteControl.remotes, {expires : 365});
+        
         this.checkConfiguration();
       }
       this.socket.close();
