@@ -30,7 +30,7 @@ function PageRemoteSwitch() {
                      'Connecting...' +
                    '</span>' +
                    '<button id="remote-switch-connection-retry-button" type="button" class="btn btn-default btn-xs">' +
-                     '<span class="glyphicon glyphicon-repeat" id="remote-switch-connection-retry"></span>Retry' +
+                     '<span class="glyphicon glyphicon-repeat" id="remote-switch-connection-retry"></span> Retry' +
                    '</button>' +
                  '</p>';
     switch(this.remoteDefinition.type) {
