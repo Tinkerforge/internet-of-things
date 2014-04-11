@@ -28,6 +28,7 @@ function RemoteSwitchC() {
 function RemoteDefinition() {
   var host;
   var port;
+  var secret;
   var uid;
   var name;
   var num;

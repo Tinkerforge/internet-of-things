@@ -131,6 +131,7 @@ function PageNewRemote() {
     
     $('#new-remote-host').val(r.host);
     $('#new-remote-port').val(r.port);
+    $('#new-remote-secret').val(r.secret);
     
     $('#new-remote-uid').append('<option value="' + r.uid + '">' + r.uid + '</option>');
     $('#new-remote-uid option[value="choose"]').prop('selected', false);
@@ -203,6 +204,12 @@ function PageNewRemote() {
                    '<label for="new-remote-port" class="col-sm-2 control-label">Port</label>' +
                    '<div class="col-sm-10">' +
                      '<input type="text" class="form-control" id="new-remote-port" value="4280">' +
+                   '</div>' +
+                 '</div>' +
+                 '<div class="form-group">' +
+                   '<label for="new-remote-secret" class="col-sm-2 control-label">Secret</label>' +
+                   '<div class="col-sm-10">' +
+                     '<input type="password" class="form-control" id="new-remote-secret" placeholder="Leave empty if authentication is not used" value="">' +
                    '</div>' +
                  '</div>' +
                  '<div class="form-group">' +
@@ -286,6 +293,101 @@ function PageNewRemote() {
     }
   };
 
+  this.findRemotes = function() {
+    this.removeElements(0);
+    
+    var progress = function(width) {
+      var bar = $('#new-remote-progress-bar');
+      
+      var newWidth = width + 2.5;
+      if(newWidth > 100) {
+        newWidth = 100; 
+      }
+      bar.width(newWidth.toString() +'%');
+      bar.text(Math.round(newWidth).toString() + "%");
+      
+      if(newWidth >= 100) {
+        $('#new-remote-progress').removeClass('active');
+        ipcon.disconnect();
+        if(uids.length > 0) {
+          for(var i = 0; i < uids.length; i++) {
+            if($('#new-remote-uid option[value="' + uids[i] + '"]').length === 0) {
+              $('#new-remote-uid').append('<option value="' + uids[i] + '">' + uids[i] + '</option>');
+            }
+          }
+          $('#div-new-remote-uid').show();
+        } else {
+          var alert_msg = 'Could not find any Remote Switch Bricklets at ' + $('#new-remote-host').val() + ':' + $('#new-remote-port').val();
+          var alert = '<div class="col-sm-12 alert alert-error"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Error:</strong> ' + alert_msg + '</div>';
+          $('#new-remote-error').prepend(alert);
+          var bar = $('#new-remote-progress-bar');
+          bar.width('0%');
+          bar.text('');
+        }
+      } else {
+        this.connectTimeout = setTimeout(progress.bind(this, newWidth), 100);
+      }
+    };
+    
+    var bar = $('#new-remote-progress-bar');
+    bar.width('0%');
+    bar.text('');
+    
+    this.connectTimeout = setTimeout(progress.bind(this, 0), 25);
+    
+    var HOST = $('#new-remote-host').val();
+    var PORT = parseInt($('#new-remote-port').val());
+    var SECRET = $('#new-remote-secret').val();
+    var ipcon = new Tinkerforge.IPConnection();
+    var uids = [];
+    ipcon.connect(HOST, PORT,
+      function(ipcon, host, port, error) {
+        ipcon.disconnect();
+        clearTimeout(this.connectTimeout);
+        var bar = $('#new-remote-progress-bar');
+        bar.width('0%');
+        bar.text('');
+        var alert_msg = 'Could not connect to ' + host + ':' + port.toString() + ' (Error: ' + error.toString() + ')';
+        var alert = '<div class="col-sm-12 alert alert-error"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Error:</strong> ' + alert_msg + '</div>';
+        $('#new-remote-error').prepend(alert);
+      }.bind(this, ipcon, HOST, PORT)
+    );
+
+    ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
+      function(ipcon, SECRET, connectReason) {
+        if(typeof SECRET === 'string' && SECRET.length > 0) {
+          ipcon.authenticate(SECRET,
+            function(ipcon) {
+              ipcon.enumerate();
+            }.bind(this, ipcon),
+            function(ipcon, error) {
+              ipcon.disconnect();
+              clearTimeout(this.connectTimeout);
+              var bar = $('#new-remote-progress-bar');
+              bar.width('0%');
+              bar.text('');
+              var alert_msg = 'Authentication failed' + ' (Error: ' + error.toString() + ')';
+              var alert = '<div class="col-sm-12 alert alert-error"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Error:</strong> ' + alert_msg + '</div>';
+              $('#new-remote-error').prepend(alert);
+            }.bind(this, ipcon)
+          );
+        } else {
+          ipcon.enumerate();
+        }
+      }.bind(this, ipcon, SECRET)
+    );
+
+    ipcon.on(Tinkerforge.IPConnection.CALLBACK_ENUMERATE,
+      function(uids, uid, connectedUid, position, hardwareVersion, firmwareVersion, deviceIdentifier, enumerationType) {
+        if(enumerationType !== Tinkerforge.IPConnection.ENUMERATION_TYPE_DISCONNECTED) {
+          if(deviceIdentifier === Tinkerforge.BrickletRemoteSwitch.DEVICE_IDENTIFIER) {
+            uids.push(uid);
+          }
+        }
+      }.bind(this, uids)
+    );
+  };
+  
   this.start = function() {
     if(!this.running) {
       this.running = true;
@@ -302,6 +404,7 @@ function PageNewRemote() {
         }
         rd.host = $('#new-remote-host').val();
         rd.port = parseInt($('#new-remote-port').val());
+        rd.secret = $('#new-remote-secret').val();
         rd.uid = $('#new-remote-uid').find(':selected').text();
         rd.name = $('#new-remote-name').val();
         rd.type = $('#new-remote-type').find(':selected').text();
@@ -362,79 +465,35 @@ function PageNewRemote() {
       
       $('#new-remote-find').click(function(e) {
         e.preventDefault();
-        this.removeElements(0);
-        
-        var progress = function(width) {
-          var bar = $('#new-remote-progress-bar');
-          
-          var newWidth = width + 2.5;
-          if(newWidth > 100) {
-            newWidth = 100; 
-          }
-          bar.width(newWidth.toString() +'%');
-          bar.text(Math.round(newWidth).toString() + "%");
-          
-          if(newWidth >= 100) {
-            $('#new-remote-progress').removeClass('active');
-            ipcon.disconnect();
-            if(uids.length > 0) {
-              for(var i = 0; i < uids.length; i++) {
-                if($('#new-remote-uid option[value="' + uids[i] + '"]').length === 0) {
-                  $('#new-remote-uid').append('<option value="' + uids[i] + '">' + uids[i] + '</option>');
-                }
-              }
-              $('#div-new-remote-uid').show();
-            } else {
-              var alert_msg = 'Could not find any Remote Switch Bricklets at ' + $('#new-remote-host').val() + ':' + $('#new-remote-port').val();
-              var alert = '<div class="col-sm-12 alert alert-error"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Error:</strong> ' + alert_msg + '</div>';
-              $('#new-remote-error').prepend(alert);
-              var bar = $('#new-remote-progress-bar');
-              bar.width('0%');
-              bar.text('');
-            }
-          } else {
-            this.connectTimeout = setTimeout(progress.bind(this, newWidth), 100);
-          }
-        };
-        
-        var bar = $('#new-remote-progress-bar');
-        bar.width('0%');
-        bar.text('');
-        
-        this.connectTimeout = setTimeout(progress.bind(this, 0), 25);
-        
-        var HOST = $('#new-remote-host').val();
-        var PORT = parseInt($('#new-remote-port').val());
-        var ipcon = new Tinkerforge.IPConnection();
-        var uids = [];
-        ipcon.connect(HOST, PORT,
-          function(ipcon, host, port, error) {
-            ipcon.disconnect();
-            clearTimeout(this.connectTimeout);
-            var bar = $('#new-remote-progress-bar');
-            bar.width('0%');
-            bar.text('');
-            var alert_msg = 'Could not connect to ' + host + ':' + port.toString() + ' (Error: ' + error.toString() + ')';
-            var alert = '<div class="col-sm-12 alert alert-error"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Error:</strong> ' + alert_msg + '</div>';
-            $('#new-remote-error').prepend(alert);
-          }.bind(this, ipcon, HOST, PORT)
-        );
-
-        ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
-          function(ipcon, connectReason) {
-            ipcon.enumerate();
-          }.bind(this, ipcon)
-        );
-
-        ipcon.on(Tinkerforge.IPConnection.CALLBACK_ENUMERATE,
-          function(uids, uid, connectedUid, position, hardwareVersion, firmwareVersion, deviceIdentifier, enumerationType) {
-            if(enumerationType !== Tinkerforge.IPConnection.ENUMERATION_TYPE_DISCONNECTED) {
-              if(deviceIdentifier === Tinkerforge.BrickletRemoteSwitch.DEVICE_IDENTIFIER) {
-                uids.push(uid);
-              }
-            }
-          }.bind(this, uids)
-        );
+        this.findRemotes();
+      }.bind(this));
+      
+      $('#new-remote-host').keypress(function(e) {
+        if(e.keyCode === 13) {
+          e.preventDefault();
+          $('#new-remote-port').focus();
+        }
+      });
+      
+      $('#new-remote-port').keypress(function(e) {
+        if(e.keyCode === 13) {
+          e.preventDefault();
+          $('#new-remote-secret').focus();
+        }
+      });
+      
+      $('#new-remote-secret').keypress(function(e) {
+        if(e.keyCode === 13) {
+          console.log("secret keypress");
+          e.preventDefault();
+          this.findRemotes();
+        }
+      }.bind(this));
+      
+      $('#new-remote-secret').keyup(function(e) {
+        if(e.keyCode !== 13) {
+          this.removeElements(0);
+        }
       }.bind(this));
       
       $('#new-remote-host').keyup(function() {
@@ -459,6 +518,7 @@ function PageNewRemote() {
       
       $('#new-remote-uid').change(function() {
         $('#div-new-remote-name').show();
+        $('#div-new-remote-name').focus();
       });
       
       $('#new-remote-name').keyup(function() {

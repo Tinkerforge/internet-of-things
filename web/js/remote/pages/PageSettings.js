@@ -63,100 +63,110 @@ function PageSettings() {
       $('#remote-settings-save').append('<span class="glyphicon glyphicon-cloud-upload"></span> Save configuration');
     }
   };
+  
+  this.loadConfiguration = function() {
+    $('#div-remote-settings-error').hide();
+    this.socket = new WebSocket('ws://' + this.HOST +':' + this.PORT + '/load');
+    this.socket.binaryType = "arraybuffer";
+    
+    this.socket.onopen = function() {
+      this.gotAnswer = false;
+      configurationID = $('#remote-settings-load-value').val();
+      if(configurationID.length === 6) {
+        this.socket.send(configurationID);
+      } else {
+        this.gotAnswer = true;
+        $('#remote-settings-error').text('Error: The Configuration ID is malformed. It should consist of one character and a five digit number.');
+        $('#div-remote-settings-error').show();
+        this.socket.close();
+      }
+    }.bind(this);
+    
+    this.socket.onmessage = function(e) {
+      if(typeof e.data == "string") {
+        remoteControl.remotes = JSON.parse(e.data);
+        // TODO: Sanity check: Does remoteControl.remotes have correct structure?
+        
+        this.gotAnswer = true;
+        
+        configurationID = $('#remote-settings-load-value').val();
+        $.cookie("configurationID", configurationID, {expires : 365});
+        
+        remoteControl.updateMenu(remoteControl.remotes);
+        this.checkConfiguration();
+      }
+      this.socket.close();
+    }.bind(this);
+    
+    this.socket.onclose = function(e) {
+      if(this.gotAnswer === false) {
+        configurationID = $('#remote-settings-load-value').val();
+        $('#remote-settings-error').text('Error: Server does not have a configuration for ID ' + configurationID + '.');
+        $('#div-remote-settings-error').show();
+      }
+    }.bind(this);
+    
+    this.socket.onerror = function(e) {
+      this.gotAnswer = true;
+      $('#remote-settings-error').text('Error: Could not open connection to server. Do you have access to the Internet?');
+      $('#div-remote-settings-error').show();
+    }.bind(this);
+  };
 
+  this.saveConfiguration = function() {
+    $('#div-remote-settings-error').hide();
+    this.socket = new WebSocket('ws://' + this.HOST +':' + this.PORT + '/save');
+    this.socket.binaryType = "arraybuffer";
+    
+    this.socket.onopen = function() {
+      this.gotAnswer = false;
+      var str = JSON.stringify(remoteControl.remotes);
+      this.socket.send(str);
+    }.bind(this);
+    
+    this.socket.onmessage = function(e) {
+      if(typeof e.data == "string") {
+        this.gotAnswer = true;
+        var configurationID = e.data;
+        if(configurationID.length === 6) {
+          $.cookie("configurationID", configurationID, {expires : 365});
+        } else {
+          $('#remote-settings-error').text('Error: Server returned malformed Cofiguration ID.');
+          $('#div-remote-settings-error').show();
+        }
+        
+        this.checkConfiguration();
+      }
+      this.socket.close();
+    }.bind(this);
+    
+    this.socket.onclose = function(e) {
+      if(this.gotAnswer === false) {
+        $('#remote-settings-error').text('Error: Could not save configuration to server.');
+        $('#div-remote-settings-error').show();
+      }
+    }.bind(this);
+    
+    this.socket.onerror = function(e) {
+      this.gotAnswer = true;
+      $('#remote-settings-error').text('Error: Could not open connection to server. Do you have access to the Internet?');
+      $('#div-remote-settings-error').show();
+    }.bind(this);
+  };
+  
   this.start = function() {
     if(!this.running) {
       this.running = true;
       this.addDOMElements();
       
-      $('#remote-settings-save').click(function() {
-        $('#div-remote-settings-error').hide();
-        this.socket = new WebSocket('ws://' + this.HOST +':' + this.PORT + '/save');
-        this.socket.binaryType = "arraybuffer";
-        
-        this.socket.onopen = function() {
-          this.gotAnswer = false;
-          var str = JSON.stringify(remoteControl.remotes);
-          this.socket.send(str);
-        }.bind(this);
-        
-        this.socket.onmessage = function(e) {
-          if(typeof e.data == "string") {
-            this.gotAnswer = true;
-            var configurationID = e.data;
-            if(configurationID.length === 6) {
-              $.cookie("configurationID", configurationID, {expires : 365});
-            } else {
-              $('#remote-settings-error').text('Error: Server returned malformed Cofiguration ID.');
-              $('#div-remote-settings-error').show();
-            }
-            
-            this.checkConfiguration();
-          }
-          this.socket.close();
-        }.bind(this);
-        
-        this.socket.onclose = function(e) {
-          if(this.gotAnswer === false) {
-            $('#remote-settings-error').text('Error: Could not save configuration to server.');
-            $('#div-remote-settings-error').show();
-          }
-        }.bind(this);
-        
-        this.socket.onerror = function(e) {
-          this.gotAnswer = true;
-          $('#remote-settings-error').text('Error: Could not open connection to server. Do you have access to the Internet?');
-          $('#div-remote-settings-error').show();
-        }.bind(this);
-      }.bind(this));
+      $('#remote-settings-save').click(this.saveConfiguration.bind(this));
       
-      $('#remote-settings-load').click(function() {
-        $('#div-remote-settings-error').hide();
-        this.socket = new WebSocket('ws://' + this.HOST +':' + this.PORT + '/load');
-        this.socket.binaryType = "arraybuffer";
-        
-        this.socket.onopen = function() {
-          this.gotAnswer = false;
-          configurationID = $('#remote-settings-load-value').val();
-          if(configurationID.length === 6) {
-            this.socket.send(configurationID);
-          } else {
-            this.gotAnswer = true;
-            $('#remote-settings-error').text('Error: The Configuration ID is malformed. It should consist of one character and a five digit number.');
-            $('#div-remote-settings-error').show();
-            this.socket.close();
-          }
-        }.bind(this);
-        
-        this.socket.onmessage = function(e) {
-          if(typeof e.data == "string") {
-            remoteControl.remotes = JSON.parse(e.data);
-            // TODO: Sanity check: Does remoteControl.remotes have correct structure?
-            
-            this.gotAnswer = true;
-            
-            configurationID = $('#remote-settings-load-value').val();
-            $.cookie("configurationID", configurationID, {expires : 365});
-            
-            remoteControl.updateMenu(remoteControl.remotes);
-            this.checkConfiguration();
-          }
-          this.socket.close();
-        }.bind(this);
-        
-        this.socket.onclose = function(e) {
-          if(this.gotAnswer === false) {
-            configurationID = $('#remote-settings-load-value').val();
-            $('#remote-settings-error').text('Error: Server does not have a configuration for ID ' + configurationID + '.');
-            $('#div-remote-settings-error').show();
-          }
-        }.bind(this);
-        
-        this.socket.onerror = function(e) {
-          this.gotAnswer = true;
-          $('#remote-settings-error').text('Error: Could not open connection to server. Do you have access to the Internet?');
-          $('#div-remote-settings-error').show();
-        }.bind(this);
+      $('#remote-settings-load').click(this.loadConfiguration.bind(this));
+      $('#remote-settings-load-value').keypress(function(e) {
+        if(e.keyCode === 13) {
+          e.preventDefault();
+          this.loadConfiguration();
+        }
       }.bind(this));
     }
   };
