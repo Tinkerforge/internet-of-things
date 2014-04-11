@@ -71,15 +71,11 @@ if __name__ == '__main__':
     else:
         debug = False
 
-    factorySave = WebSocketServerFactory("ws://localhost:{0}".format(LOCAL_PROXY_PORT),
-                                         debug = debug,
-                                         debugCodePaths = debug)
+    factorySave = WebSocketServerFactory("ws://localhost:{0}".format(LOCAL_PROXY_PORT), debug = debug)
     factorySave.protocol = RemoteControlSaveProtocol
     resourceSave = WebSocketResource(factorySave)
 
-    factoryLoad = WebSocketServerFactory("ws://localhost:{0}".format(LOCAL_PROXY_PORT),
-                                         debug = debug,
-                                         debugCodePaths = debug)
+    factoryLoad = WebSocketServerFactory("ws://localhost:{0}".format(LOCAL_PROXY_PORT), debug = debug)
     factoryLoad.protocol = RemoteControlLoadProtocol
     resourceLoad = WebSocketResource(factoryLoad)
 
