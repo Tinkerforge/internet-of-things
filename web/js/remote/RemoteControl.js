@@ -57,6 +57,12 @@ function RemoteControl() {
       remoteControl.remotes = remotes;
       remoteControl.updateMenu(remoteControl.remotes);
     }
+    
+    var configurationID = $.cookie("configurationID");
+    if(typeof configurationID !== 'string' || configurationID.length !== 6) {
+      $('.glyphicon-pencil').css('color', '#FF0000');
+    }
+
   };
   
   this.brickMenuClick = function(name, ev) {

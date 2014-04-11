@@ -461,6 +461,7 @@ function PageNewRemote() {
         
         $.cookie("remotes", remoteControl.remotes, {expires : 365});
         $.cookie("configurationID", null);
+        $('.glyphicon-pencil').css('color', '#FF0000');
       }.bind(this));
       
       $('#new-remote-find').click(function(e) {

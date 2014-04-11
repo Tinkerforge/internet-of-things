@@ -276,6 +276,7 @@ function PageRemoteSwitch() {
         remoteControl.updateMenu(remoteControl.remotes);
         $.cookie("remotes", remoteControl.remotes, {expires : 365});
         $.cookie("configurationID", configurationID, {expires : 365});
+        $('.glyphicon-pencil').css('color', '');
         $('#remote-page-overview').trigger('click');
       }.bind(this));
       

@@ -91,6 +91,7 @@ function PageSettings() {
         
         configurationID = $('#remote-settings-load-value').val();
         $.cookie("configurationID", configurationID, {expires : 365});
+        $('.glyphicon-pencil').css('color', '');
         
         remoteControl.updateMenu(remoteControl.remotes);
         $.cookie("remotes", remoteControl.remotes, {expires : 365});
@@ -132,6 +133,7 @@ function PageSettings() {
         var configurationID = e.data;
         if(configurationID.length === 6) {
           $.cookie("configurationID", configurationID, {expires : 365});
+          $('.glyphicon-pencil').css('color', '');
         } else {
           $('#remote-settings-error').text('Error: Server returned malformed Cofiguration ID.');
           $('#div-remote-settings-error').show();
