@@ -16,7 +16,7 @@ function PageSettings() {
                  '</div>' +
                  '<div class="form-group">' +
                    '<div id="div-remote-settings-load-value" class="col-sm-12">' +
-                     '<input placeholder="Configuration ID" class="form-control" type="text" id="remote-settings-load-value"/>' +
+                     '<input placeholder="Configuration ID to load" class="form-control" type="text" id="remote-settings-load-value"/>' +
                    '</div>' +
                  '</div>' +
                  '<div class="form-group">' +
