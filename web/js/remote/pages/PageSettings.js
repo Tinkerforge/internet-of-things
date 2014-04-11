@@ -2,8 +2,8 @@ function PageSettings() {
   this.name = "Settings";
   this.running = false;
   this.socket = null;
-  this.HOST = 'localhost';
-  this.PORT = '9000';
+  this.HOST = 'www.iot-remote.com';
+  this.PORT = '80';
   this.gotAnswer = false;
 
   this.addDOMElements = function() {

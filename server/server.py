@@ -7,7 +7,8 @@ from twisted.internet import reactor
 from twisted.web.server import Site
 from twisted.web.static import Data
 
-CONFIGURATION_PATH = os.path.join('/' + 'home', 'olaf', 'ee', 'remote-control', 'configurations')
+CONFIGURATION_PATH = os.path.join('/' + 'srv', 'web', 'com.iot-remote.www', 'configurations')
+LOCAL_PROXY_PORT = 5050
 
 try:
     from autobahn.twisted.websocket import WebSocketServerProtocol, WebSocketServerFactory
@@ -70,13 +71,13 @@ if __name__ == '__main__':
     else:
         debug = False
 
-    factorySave = WebSocketServerFactory("ws://localhost:9000",
+    factorySave = WebSocketServerFactory("ws://localhost:{0}".format(LOCAL_PROXY_PORT),
                                          debug = debug,
                                          debugCodePaths = debug)
     factorySave.protocol = RemoteControlSaveProtocol
     resourceSave = WebSocketResource(factorySave)
 
-    factoryLoad = WebSocketServerFactory("ws://localhost:9000",
+    factoryLoad = WebSocketServerFactory("ws://localhost:{0}".format(LOCAL_PROXY_PORT),
                                          debug = debug,
                                          debugCodePaths = debug)
     factoryLoad.protocol = RemoteControlLoadProtocol
@@ -91,6 +92,6 @@ if __name__ == '__main__':
 
     # both under one Twisted Web Site
     site = Site(root)
-    reactor.listenTCP(9000, site)
+    reactor.listenTCP(LOCAL_PROXY_PORT, site)
 
     reactor.run()
