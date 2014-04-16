@@ -40,6 +40,7 @@ function RemoteControl() {
   this.pages = {};
   this.pages['overview'] = new PageOverview();
   this.pages['settings'] = new PageSettings();
+  this.pages['about'] = new PageAbout();
   this.pages['legal-info'] = new PageLegalInfo();
   this.pages['new-remote'] = new PageNewRemote();
   this.pages['edit-remote'] = new PageNewRemote();
