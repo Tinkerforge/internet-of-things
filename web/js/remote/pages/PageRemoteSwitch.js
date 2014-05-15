@@ -217,7 +217,7 @@ function PageRemoteSwitch() {
           
         case 'B Switch':
           this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
-          this.remoteBricklet.switchSocketA(this.remoteDefinition.typeDefinition.address, 
+          this.remoteBricklet.switchSocketB(this.remoteDefinition.typeDefinition.address, 
                                             this.remoteDefinition.typeDefinition.unit, 
                                             Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_OFF);
           break;
