@@ -162,76 +162,90 @@ function PageRemoteSwitch() {
       }.bind(this)
     );
   };
-  
+
+  this.checkBrickletIdentity = function(uid,
+                                        connected_uid,
+                                        position,
+                                        hardware_version,
+                                        firmware_version,
+                                        device_identifier) {
+                                  if (device_identifier == Tinkerforge.BrickletRemoteSwitchV2.DEVICE_IDENTIFIER) {
+                                    this.remoteBricklet =
+                                      new Tinkerforge.BrickletRemoteSwitchV2(this.remoteDefinition.uid,
+                                                                             this.ipcon);
+                                  }
+
+                                  this.updateStatusTimeout = setTimeout(this.updateStatus.bind(this), 1000);
+
+                                  $('#remote-switch-dim').click(function() {
+                                    this.disableButtons();
+                                    $('#remote-switch-switching').show();
+                                    this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
+                                    this.remoteBricklet.dimSocketB(this.remoteDefinition.typeDefinition.address,
+                                                                   this.remoteDefinition.typeDefinition.unit,
+                                                                   parseInt($('#remote-switch-dim-value').val()));
+                                  }.bind(this));
+
+                                  $('#remote-switch-on').click(function() {
+                                    this.disableButtons();
+                                    $('#remote-switch-switching').show();
+                                    switch(this.remoteDefinition.type) {
+                                      case 'A Switch':
+                                        this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
+                                        this.remoteBricklet.switchSocketA(this.remoteDefinition.typeDefinition.houseCode,
+                                                                          this.remoteDefinition.typeDefinition.receiverCode,
+                                                                          Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_ON);
+                                        break;
+
+                                      case 'B Switch':
+                                        this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
+                                        this.remoteBricklet.switchSocketB(this.remoteDefinition.typeDefinition.address,
+                                                                          this.remoteDefinition.typeDefinition.unit,
+                                                                          Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_ON);
+                                        break;
+
+                                      case 'C Switch':
+                                        this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
+                                        this.remoteBricklet.switchSocketC(this.remoteDefinition.typeDefinition.systemCode,
+                                                                          this.remoteDefinition.typeDefinition.deviceCode,
+                                                                          Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_ON);
+                                        break;
+                                    }
+                                  }.bind(this));
+
+                                  $('#remote-switch-off').click(function() {
+                                    this.disableButtons();
+                                    $('#remote-switch-switching').show();
+                                    switch(this.remoteDefinition.type) {
+                                      case 'A Switch':
+                                        this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
+                                        this.remoteBricklet.switchSocketA(this.remoteDefinition.typeDefinition.houseCode,
+                                                                          this.remoteDefinition.typeDefinition.receiverCode,
+                                                                          Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_OFF);
+                                        break;
+
+                                      case 'B Switch':
+                                        this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
+                                        this.remoteBricklet.switchSocketB(this.remoteDefinition.typeDefinition.address,
+                                                                          this.remoteDefinition.typeDefinition.unit,
+                                                                          Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_OFF);
+                                        break;
+
+                                      case 'C Switch':
+                                        this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
+                                        this.remoteBricklet.switchSocketC(this.remoteDefinition.typeDefinition.systemCode,
+                                                                          this.remoteDefinition.typeDefinition.deviceCode,
+                                                                          Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_OFF);
+                                        break;
+                                    }
+                                  }.bind(this));
+                               }
+
   this.connectionEstablished = function() {
     this.remoteBricklet = new Tinkerforge.BrickletRemoteSwitch(this.remoteDefinition.uid, this.ipcon);
-    
-    this.updateStatusTimeout = setTimeout(this.updateStatus.bind(this), 1000);
-    
-    $('#remote-switch-dim').click(function() {
-      this.disableButtons();
-      $('#remote-switch-switching').show();
-      this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
-      this.remoteBricklet.dimSocketB(this.remoteDefinition.typeDefinition.address, 
-                                     this.remoteDefinition.typeDefinition.unit, 
-                                     parseInt($('#remote-switch-dim-value').val()));
-    }.bind(this));
-    
-    $('#remote-switch-on').click(function() {
-      this.disableButtons();
-      $('#remote-switch-switching').show();
-      switch(this.remoteDefinition.type) {
-        case 'A Switch':
-          this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
-          this.remoteBricklet.switchSocketA(this.remoteDefinition.typeDefinition.houseCode, 
-                                            this.remoteDefinition.typeDefinition.receiverCode, 
-                                            Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_ON);
-          break;
-
-        case 'B Switch':
-          this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
-          this.remoteBricklet.switchSocketB(this.remoteDefinition.typeDefinition.address, 
-                                            this.remoteDefinition.typeDefinition.unit, 
-                                            Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_ON);
-          break;
-          
-        case 'C Switch':
-          this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
-          this.remoteBricklet.switchSocketC(this.remoteDefinition.typeDefinition.systemCode, 
-                                            this.remoteDefinition.typeDefinition.deviceCode, 
-                                            Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_ON);
-          break;
-      }
-    }.bind(this));
-    
-    $('#remote-switch-off').click(function() {
-      this.disableButtons();
-      $('#remote-switch-switching').show();
-      switch(this.remoteDefinition.type) {
-        case 'A Switch':
-          this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
-          this.remoteBricklet.switchSocketA(this.remoteDefinition.typeDefinition.houseCode, 
-                                            this.remoteDefinition.typeDefinition.receiverCode, 
-                                            Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_OFF);
-          break;
-          
-        case 'B Switch':
-          this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
-          this.remoteBricklet.switchSocketB(this.remoteDefinition.typeDefinition.address, 
-                                            this.remoteDefinition.typeDefinition.unit, 
-                                            Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_OFF);
-          break;
-          
-        case 'C Switch':
-          this.remoteBricklet.setRepeats(this.remoteDefinition.typeDefinition.repeats);
-          this.remoteBricklet.switchSocketC(this.remoteDefinition.typeDefinition.systemCode, 
-                                            this.remoteDefinition.typeDefinition.deviceCode, 
-                                            Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_OFF);
-          break;
-      }
-    }.bind(this));
+    this.remoteBricklet.getIdentity(this.checkBrickletIdentity.bind(this), null);
   };
-  
+
   this.start = function() {
     if(!this.running) {
       this.addDOMElements();

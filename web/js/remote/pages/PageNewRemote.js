@@ -380,8 +380,9 @@ function PageNewRemote() {
     ipcon.on(Tinkerforge.IPConnection.CALLBACK_ENUMERATE,
       function(uids, uid, connectedUid, position, hardwareVersion, firmwareVersion, deviceIdentifier, enumerationType) {
         if(enumerationType !== Tinkerforge.IPConnection.ENUMERATION_TYPE_DISCONNECTED) {
-          if(deviceIdentifier === Tinkerforge.BrickletRemoteSwitch.DEVICE_IDENTIFIER) {
-            uids.push(uid);
+          if(deviceIdentifier === Tinkerforge.BrickletRemoteSwitch.DEVICE_IDENTIFIER ||
+             deviceIdentifier === Tinkerforge.BrickletRemoteSwitchV2.DEVICE_IDENTIFIER) {
+               uids.push(uid);
           }
         }
       }.bind(this, uids)
