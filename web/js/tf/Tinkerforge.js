@@ -8740,8 +8740,8 @@ function BrickletBarometer(uid, ipcon) {
 	this.getAirPressure = function(returnCallback, errorCallback) {
 		/*
 		Returns the air pressure of the air pressure sensor. The value
-		has a range of 10000 to 1200000 and is given in mbar/1000, i.e. a value
-		of 1001092 means that an air pressure of 1001.092 mbar is measured.
+		has a range of 10000 to 1200000 and is given in hPa/1000, i.e. a value
+		of 1001092 means that an air pressure of 1001.092 hPa is measured.
 		
 		If you want to get the air pressure periodically, it is recommended to use the
 		:cb:`Air Pressure` callback and set the period with
@@ -8875,7 +8875,7 @@ function BrickletBarometer(uid, ipcon) {
 	};
 	this.setReferenceAirPressure = function(airPressure, returnCallback, errorCallback) {
 		/*
-		Sets the reference air pressure in mbar/1000 for the altitude calculation.
+		Sets the reference air pressure in hPa/1000 for the altitude calculation.
 		Valid values are between 10000 and 1200000.
 		Setting the reference to the current air pressure results in a calculated
 		altitude of 0cm. Passing 0 is a shortcut for passing the current air pressure as
@@ -8886,7 +8886,7 @@ function BrickletBarometer(uid, ipcon) {
 		`QFE <https://en.wikipedia.org/wiki/Mean_sea_level_pressure#Mean_sea_level_pressure>`__
 		used in aviation.
 		
-		The default value is 1013.25mbar.
+		The default value is 1013.25hPa.
 		*/
 		this.ipcon.sendRequest(this, BrickletBarometer.FUNCTION_SET_REFERENCE_AIR_PRESSURE, [airPressure], 'i', '', returnCallback, errorCallback);
 	};
